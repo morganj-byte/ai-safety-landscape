@@ -244,11 +244,12 @@
 <header>
   <div class="brand">
     <h1>The AI Safety Landscape</h1>
-    <button id="descToggle" class="desc-toggle" aria-expanded="false">What is AI safety, and why worry? ▾</button>
+    <button id="descToggle" class="desc-toggle" aria-expanded="false">What is AI Safety? How do I use this map? ▾</button>
     <div id="brandDesc" class="brand-desc-wrap" style="display:none">
       <p class="brand-desc">AI is advancing faster than almost any technology in history, and we're building systems that can increasingly reason, plan, and act on their own. Yet we don't fully understand how they work or how to reliably control them. We can specify what we want, but the AI often finds unexpected routes to that goal, sometimes ones we'd never endorse.</p>
       <p class="brand-desc">That disconnect matters more as the stakes rise. A misaligned recommendation algorithm is annoying. A misaligned system running critical infrastructure or making high-stakes decisions could cause serious, irreversible harm, and the more capable and autonomous these systems get, the less room there is to correct course.</p>
       <p class="brand-desc">Handled well, this same technology could be one of the best things to happen to us: faster science, better medicine, higher living standards. That's exactly why safety matters. Safety isn't the opposite of progress, it's the path to it. It's far cheaper to build the guardrails before these systems are everywhere than to retrofit them once they are. We got the technology moving quickly. Now we need the wisdom to steer it. Explore the map to deepen your understanding of the AI safety landscape.</p>
+      <p class="brand-desc"><b style="color:var(--ink)">How to use this map.</b> The <b>Map</b> tab is the landscape itself: switch between a <b>Flow</b> view (organized left to right, from concepts, to threat models, to what we do about them, to what winning looks like) and a free-form view you can drag around, and click any node to light up its connections and open its details. Color shows the category, and the search box and "core concepts only" filter help you narrow things down. Use <b>How Models Work</b> for a plain-language primer on how AI systems are built, the <b>Glossary</b> to look up any term, and <b>Flashcards</b> to test yourself. The yellow chips throughout jump you to related ideas.</p>
     </div>
   </div>
   <div class="maintabs" id="mainTabs">
@@ -1632,7 +1633,7 @@ window.openMapNode=openMapNode;
 /* collapsible header description */
 (function(){
   const btn=document.getElementById("descToggle"), d=document.getElementById("brandDesc");
-  const LABEL="What is AI safety, and why worry?";
+  const LABEL="What is AI Safety? How do I use this map?";
   btn.onclick=()=>{
     const open=d.style.display!=="none";
     d.style.display=open?"none":"block";
