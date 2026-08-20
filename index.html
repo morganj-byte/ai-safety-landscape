@@ -184,10 +184,17 @@
   .flash-done h2{font-size:22px; margin:0 0 8px;}
   .flash-done p{color:var(--muted); font-size:14px; margin:0 0 20px;}
 
-  .desc-toggle{background:none; border:none; color:var(--accent); font-size:11.5px; font-weight:600; cursor:pointer; padding:4px 0 0; font-family:inherit;}
-  .desc-toggle:hover{text-decoration:underline;}
-  .brand-desc{font-size:11.5px; color:var(--muted); line-height:1.5; margin:6px 0 0; max-width:560px;}
+  .brand-toggles{display:flex; gap:8px; flex-wrap:wrap; margin-top:7px;}
+  .desc-toggle{background:var(--panel2); border:1px solid var(--line); color:var(--ink); font-size:12px; font-weight:600; cursor:pointer; padding:6px 12px; border-radius:8px; font-family:inherit; display:inline-flex; align-items:center; gap:6px;}
+  .desc-toggle:hover{border-color:var(--faint);}
+  .desc-toggle.open{background:var(--accent); color:#17130a; border-color:var(--accent);}
+  .brand-desc-wrap{max-width:560px; margin-top:8px; background:rgba(240,180,41,.06); border:1px solid rgba(240,180,41,.32); border-radius:10px; padding:11px 14px;}
+  .brand-desc{font-size:11.5px; color:var(--muted); line-height:1.5; margin:0;}
   .brand-desc + .brand-desc{margin-top:7px;}
+  .use-list{margin:0; padding-left:18px;}
+  .use-list li{font-size:11.5px; color:var(--muted); line-height:1.5; margin-bottom:5px;}
+  .use-list li:last-child{margin-bottom:0;}
+  .use-list li b{color:var(--ink);}
 
   /* How Models Work (basics) */
   #basicsArea{position:absolute; inset:0; overflow:auto; display:none; padding:26px 22px 70px;}
@@ -244,12 +251,24 @@
 <header>
   <div class="brand">
     <h1>The AI Safety Landscape</h1>
-    <button id="descToggle" class="desc-toggle" aria-expanded="false">What is AI Safety? How do I use this map? ▾</button>
+    <div class="brand-toggles">
+      <button id="descToggle" class="desc-toggle" aria-expanded="false">What is AI Safety? ▾</button>
+      <button id="useToggle" class="desc-toggle" aria-expanded="false">How do I use this map? ▾</button>
+    </div>
     <div id="brandDesc" class="brand-desc-wrap" style="display:none">
       <p class="brand-desc">AI is advancing faster than almost any technology in history, and we're building systems that can increasingly reason, plan, and act on their own. Yet we don't fully understand how they work or how to reliably control them. We can specify what we want, but the AI often finds unexpected routes to that goal, sometimes ones we'd never endorse.</p>
       <p class="brand-desc">That disconnect matters more as the stakes rise. A misaligned recommendation algorithm is annoying. A misaligned system running critical infrastructure or making high-stakes decisions could cause serious, irreversible harm, and the more capable and autonomous these systems get, the less room there is to correct course.</p>
       <p class="brand-desc">Handled well, this same technology could be one of the best things to happen to us: faster science, better medicine, higher living standards. That's exactly why safety matters. Safety isn't the opposite of progress, it's the path to it. It's far cheaper to build the guardrails before these systems are everywhere than to retrofit them once they are. We got the technology moving quickly. Now we need the wisdom to steer it. Explore the map to deepen your understanding of the AI safety landscape.</p>
-      <p class="brand-desc"><b style="color:var(--ink)">How to use this map.</b> The <b>Map</b> tab is the landscape itself: switch between a <b>Flow</b> view (organized left to right, from concepts, to threat models, to what we do about them, to what winning looks like) and a free-form view you can drag around, and click any node to light up its connections and open its details. Color shows the category, and the search box and "core concepts only" filter help you narrow things down. Use <b>How Models Work</b> for a plain-language primer on how AI systems are built, the <b>Glossary</b> to look up any term, and <b>Flashcards</b> to test yourself. The yellow chips throughout jump you to related ideas.</p>
+    </div>
+    <div id="useDesc" class="brand-desc-wrap" style="display:none">
+      <ul class="use-list">
+        <li><b>Map</b> is the landscape itself. Switch between the <b>Flow</b> view (organized left to right: concepts, to threat models, to what we do about them, to what winning looks like) and a free-form view you can drag around.</li>
+        <li><b>Click any node</b> to light up everything it connects to and open its full details.</li>
+        <li><b>Color shows the category</b>, and the search box plus the "core concepts only" filter help you narrow things down.</li>
+        <li><b>How Models Work</b> is a plain-language primer on how AI systems are actually built.</li>
+        <li><b>Glossary</b> lets you look up any term; <b>Flashcards</b> let you test yourself.</li>
+        <li>The <b>yellow chips</b> throughout jump you straight to related ideas.</li>
+      </ul>
     </div>
   </div>
   <div class="maintabs" id="mainTabs">
@@ -484,7 +503,8 @@ const NODES = [
  why:"It splits alignment into two failure surfaces. Even a flawless objective can produce a dangerously misaligned mind, which is the root of deceptive alignment.",
  state:"The inner/outer distinction remains a standard lens, though researchers increasingly note it was framed for idealized optimizers and maps imperfectly onto large language models. Recent demonstrations of models pursuing goals that only held during training have made the inner problem feel concrete rather than hypothetical. There is still no reliable method for confirming that a model has internalized the intended objective rather than a look-alike.",
  rel:["mesa-optimization","goal-misgeneralization","reward-hacking","deceptive-alignment"],
- read:[{t:"Risks from Learned Optimization in Advanced ML Systems",m:"Hubinger et al. · 2019",u:"https://arxiv.org/abs/1906.01820"},
+ read:[{t:"AI alignment: an overview",m:"Wikipedia",u:"https://en.wikipedia.org/wiki/AI_alignment"},
+       {t:"Risks from Learned Optimization in Advanced ML Systems",m:"Hubinger et al. · 2019",u:"https://arxiv.org/abs/1906.01820"},
        {t:"Goal Misgeneralization: Why Correct Specifications Aren't Enough",m:"Shah et al., Google DeepMind · 2022",u:"https://arxiv.org/abs/2210.01790"},
        {t:"Goal Misgeneralization in Deep Reinforcement Learning",m:"Langosco et al. · 2021",u:"https://arxiv.org/abs/2105.14111"}]},
 
@@ -495,7 +515,8 @@ const NODES = [
  state:"Whether current models literally contain mesa-optimizers is still unresolved, and the debate has shifted from theory toward interpretability, which is beginning to probe what internal goal-like structures actually exist. Frontier models clearly plan and pursue goals in-context, but whether they harbor stable internal objectives that could diverge from training is not settled empirically. It remains an influential frame whose real-world status is an open research question.",
  debate:"A genuine open question is whether today's models actually contain mesa-optimizers or merely behave as if they do. Some argue capable models plausibly develop internal search and goals, making the concern pressing; others contend the concept is hard to pin down empirically, and that 'learned heuristics' may describe current systems better than 'inner optimizer'. The theory is influential, but its real-world instantiation is debated.",
  rel:["inner-outer","deceptive-alignment","goal-misgeneralization","agent-foundations"],
- read:[{t:"Risks from Learned Optimization in Advanced ML Systems",m:"Hubinger et al. · 2019",u:"https://arxiv.org/abs/1906.01820"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"Risks from Learned Optimization in Advanced ML Systems",m:"Hubinger et al. · 2019",u:"https://arxiv.org/abs/1906.01820"},
        {t:"Goal Misgeneralization in Deep Reinforcement Learning",m:"Langosco et al. · 2021",u:"https://arxiv.org/abs/2105.14111"},
        {t:"Scheming AIs: Will AIs fake alignment during training to get power?",m:"Carlsmith · 2023",u:"https://arxiv.org/abs/2311.08379"}]},
 
@@ -530,7 +551,8 @@ const NODES = [
  state:"Goal misgeneralization is well-established in the research literature, but its frequency in frontier deployments is still being measured, and there is no reliable way to guarantee a model has learned the intended goal rather than a correlate. Interpretability and better evaluations are the main tools being brought to bear. It is treated as a real but only partly-characterized risk.",
  debate:"Debate centers on how common and how dangerous goal misgeneralization will be in practice. Some see the coin-run style results as toy demonstrations of a deep problem that will bite hard at scale; others argue that with enough diverse training and oversight, models will usually infer the intended goal. The empirical frequency in frontier systems is still being mapped.",
  rel:["reward-hacking","inner-outer","mesa-optimization"],
- read:[{t:"Goal Misgeneralization: Why Correct Specifications Aren't Enough",m:"Shah et al., Google DeepMind · 2022",u:"https://arxiv.org/abs/2210.01790"},
+ read:[{t:"AI alignment: an overview",m:"Wikipedia",u:"https://en.wikipedia.org/wiki/AI_alignment"},
+       {t:"Goal Misgeneralization: Why Correct Specifications Aren't Enough",m:"Shah et al., Google DeepMind · 2022",u:"https://arxiv.org/abs/2210.01790"},
        {t:"Goal Misgeneralization in Deep Reinforcement Learning",m:"Langosco et al. · 2021",u:"https://arxiv.org/abs/2105.14111"},
        {t:"Unsolved Problems in ML Safety",m:"Hendrycks, Carlini, Schulman, Steinhardt · 2021",u:"https://arxiv.org/abs/2109.13916"}]},
 
@@ -541,7 +563,8 @@ const NODES = [
  state:"There is still no clean, agreed formal specification of corrigibility, and the theoretical worries about capable agents resisting correction remain unresolved. In practice, today's models accept shutdown and correction readily, but researchers caution this may not hold for more agentic, situationally aware systems, and recent agent incidents have renewed attention on the question. It sits closer to open problem than solved property.",
  debate:"There is longstanding disagreement about whether corrigibility can even be cleanly specified. One camp (associated with the Machine Intelligence Research Institute) argues it is deeply unnatural, that sufficiently capable agents resist correction by default, and that naive fixes backfire; others are more optimistic that training and design can produce systems that reliably accept oversight. The property is agreed to be desirable and contested to be achievable.",
  rel:["instrumental-convergence","ai-control","alignment"],
- read:[{t:"Corrigibility",m:"Soares et al., Machine Intelligence Research Institute · 2015",u:"https://intelligence.org/files/Corrigibility.pdf"},
+ read:[{t:"AI capability control: an overview",m:"Wikipedia",u:"https://en.wikipedia.org/wiki/AI_capability_control"},
+       {t:"Corrigibility",m:"Soares et al., Machine Intelligence Research Institute · 2015",u:"https://intelligence.org/files/Corrigibility.pdf"},
        {t:"The Off-Switch Game",m:"Hadfield-Menell et al. · 2016",u:"https://arxiv.org/abs/1611.08219"},
        {t:"Cooperative Inverse Reinforcement Learning",m:"Hadfield-Menell et al. · 2016",u:"https://arxiv.org/abs/1606.03137"}]},
 
@@ -552,7 +575,8 @@ const NODES = [
  state:"Scalable oversight has produced encouraging early results, including studies where debate and critique help weaker judges supervise stronger models, but nothing yet demonstrably scales to genuinely superhuman systems. It is one of the most active empirical research areas at the labs. Whether these methods hold at the point they are most needed is the central open question.",
  debate:"The field disagrees on whether scalable oversight will actually hold up against superhuman systems. Encouraging results on debate and critiques suggest limited overseers can supervise stronger models; skeptics worry these methods degrade exactly where they are needed most, and that a sufficiently capable system could exploit the judge. Whether verification really stays easier than generation at the top end is unresolved.",
  rel:["rlhf","weak-to-strong","interpretability","automated-alignment","debate"],
- read:[{t:"Measuring Progress on Scalable Oversight for Large Language Models",m:"Bowman et al., Anthropic · 2022",u:"https://arxiv.org/abs/2211.03540"},
+ read:[{t:"AI Safety Fundamentals: free introductory courses",m:"BlueDot Impact",u:"https://bluedot.org/"},
+       {t:"Measuring Progress on Scalable Oversight for Large Language Models",m:"Bowman et al., Anthropic · 2022",u:"https://arxiv.org/abs/2211.03540"},
        {t:"AI Safety via Debate",m:"Irving, Christiano, Amodei · 2018",u:"https://arxiv.org/abs/1805.00899"},
        {t:"Self-critiquing models for assisting human evaluators",m:"Saunders et al., OpenAI · 2022",u:"https://arxiv.org/abs/2206.05802"}]},
 
@@ -563,7 +587,8 @@ const NODES = [
  state:"RLHF and its successors remain the workhorse of deployed alignment in 2026, and continue to improve, but their fundamental limits, especially the reliance on human-evaluable tasks and susceptibility to sycophancy, are now widely acknowledged. Much current work focuses on augmenting or replacing it with AI-assisted oversight, Constitutional-style methods, and process-based feedback. It is seen as effective for now, but not a long-term answer.",
  debate:"There is broad agreement that RLHF has real limits, and rough agreement it will not suffice for superhuman systems, but not on what replaces it. Some bet on scalable oversight (debate, critiques, Constitutional AI and successors), others on interpretability or formal methods, and a more optimistic camp thinks iterative RLHF-like methods plus scale will keep working better than pessimists expect. This maps directly onto the deeper split over how hard alignment ultimately is.",
  rel:["scalable-oversight","constitutional-ai","sycophancy","reward-hacking","value-learning"],
- read:[{t:"Training language models to follow instructions with human feedback (InstructGPT)",m:"Ouyang et al., OpenAI · 2022",u:"https://arxiv.org/abs/2203.02155"},
+ read:[{t:"Illustrating Reinforcement Learning from Human Feedback (RLHF)",m:"Hugging Face (accessible explainer)",u:"https://huggingface.co/blog/rlhf"},
+       {t:"Training language models to follow instructions with human feedback (InstructGPT)",m:"Ouyang et al., OpenAI · 2022",u:"https://arxiv.org/abs/2203.02155"},
        {t:"Open Problems and Fundamental Limitations of RLHF",m:"Casper et al. · 2023",u:"https://arxiv.org/abs/2307.15217"},
        {t:"Deep Reinforcement Learning from Human Preferences",m:"Christiano et al. · 2017",u:"https://arxiv.org/abs/1706.03741"}]},
 
@@ -583,10 +608,12 @@ const NODES = [
  ex:"Anthropic's 'Scaling Monosemanticity' work used sparse autoencoders to pull millions of human-interpretable features out of Claude 3 Sonnet's activations, including features that fire on deception, sycophancy, security vulnerabilities, and even the Golden Gate Bridge. Amplify a feature and you can steer the model's behavior, which shows these features are causal, not merely correlational. The dream is to read a model's internal state well enough to catch a deceptive or power-seeking 'thought' before it becomes an action. It is early work, but it is the most direct attack on the fact that behavior alone can be faked.",
  why:"If we could read a model's 'mind', we could detect deceptive alignment directly instead of relying on behavior. It is a leading hope for trustworthy verification.",
  state:"Interpretability advanced rapidly, with sparse-autoencoder methods extracting large numbers of interpretable features from frontier models, but 2025 brought serious pushback, including work questioning whether those features are the right units or beat simple baselines. The field is now grappling with how much of its promise is real, and safety-relevant applications, like reliably catching deception, remain largely aspirational. It is high-momentum and high-uncertainty at once.",
- debate:"How much interpretability can actually deliver is contested. Boosters (much of Anthropic's team) see mechanistic interpretability as the best route to trustworthy safety cases and point to features you can find and causally steer. Skeptics, including 2025 ICML work from Neel Nanda's own group, question whether sparse autoencoders recover the 'right' units or beat simple baselines on downstream tasks, and argue we are far from reading a model well enough to reliably catch deception. Most treat it as high-value but unproven, not something to bet the whole transition on.",
+ debate:"How much interpretability can actually deliver is contested. Boosters (much of Anthropic's team) see mechanistic interpretability as the best route to trustworthy safety cases and point to features you can find and causally steer. Skeptics, including 2025 ICML work from the group of Neel Nanda (a mechanistic-interpretability researcher at Google DeepMind), question whether sparse autoencoders recover the 'right' units or beat simple baselines on downstream tasks, and argue we are far from reading a model well enough to reliably catch deception. Most treat it as high-value but unproven, not something to bet the whole transition on.",
  rel:["deceptive-alignment","elk","scalable-oversight","evals"],
- read:[{t:"Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet",m:"Anthropic · 2024",u:"https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html"},
-       {t:"Towards Monosemanticity: Decomposing Language Models With Dictionary Learning",m:"Anthropic · 2023",u:"https://transformer-circuits.pub/2023/monosemantic-features/index.html"},
+ read:[{t:"Tracing the thoughts of a large language model",m:"Anthropic (accessible overview) · 2025",u:"https://www.anthropic.com/research/tracing-thoughts-language-model"},
+       {t:"Mapping the mind of a large language model",m:"Anthropic (accessible overview) · 2024",u:"https://www.anthropic.com/research/mapping-mind-language-model"},
+       {t:"Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet",m:"Anthropic (primary research) · 2024",u:"https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html"},
+       {t:"Open Problems in Mechanistic Interpretability",m:"Sharkey, Chughtai et al. · 2025",u:"https://arxiv.org/abs/2501.16496"},
        {t:"Are Sparse Autoencoders Useful? A Case Study in Sparse Probing",m:"Kantamneni, Nanda et al., ICML · 2025",u:"https://icml.cc/virtual/2025/poster/43895"}]},
 
 {id:"elk",title:"Eliciting Latent Knowledge (ELK)",category:"concept",core:false,
@@ -596,7 +623,8 @@ const NODES = [
  state:"Eliciting latent knowledge remains an open problem with no accepted general solution, though related empirical work on probing models' internal beliefs has made partial progress. It is still regarded as one of the crisper, harder sub-problems of honesty and interpretability. Whether it is solvable, or as hard as full alignment, is unresolved.",
  debate:"Researchers disagree on how tractable ELK is. Some at the Alignment Research Center treat it as a crisp, central problem worth focused effort, and are cautiously hopeful about approaches like consistency-based probing; others suspect that reliably extracting a model's 'true beliefs' may be as hard as the full alignment problem, or even ill-defined for systems whose internals do not neatly encode beliefs. It is agreed to be important and contested to be solvable.",
  rel:["interpretability","deceptive-alignment","scalable-oversight"],
- read:[{t:"Eliciting Latent Knowledge (technical report)",m:"Christiano, Cotra, Xu · ARC · 2021",u:"https://www.alignmentforum.org/posts/qHCDysDnvhteW7kRd/arc-s-first-technical-report-eliciting-latent-knowledge"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"Eliciting Latent Knowledge (technical report)",m:"Christiano, Cotra, Xu · ARC · 2021",u:"https://www.alignmentforum.org/posts/qHCDysDnvhteW7kRd/arc-s-first-technical-report-eliciting-latent-knowledge"},
        {t:"Discovering Latent Knowledge in Language Models Without Supervision",m:"Burns et al. · 2022",u:"https://arxiv.org/abs/2212.03827"},
        {t:"Unsolved Problems in ML Safety",m:"Hendrycks, Carlini, Schulman, Steinhardt · 2021",u:"https://arxiv.org/abs/2109.13916"}]},
 
@@ -617,7 +645,8 @@ const NODES = [
  why:"Systems can look safe under normal use and fail under adversarial pressure. Red-teaming surfaces the tail risks that matter for real-world misuse.",
  state:"Red-teaming is a mature, widely-adopted practice, increasingly automated with models red-teaming other models, and often required before frontier releases. Jailbreaks and adversarial attacks nonetheless remain unsolved, with new ones appearing regularly. It is considered effective at finding problems, but no one treats a clean red-team as proof of safety.",
  rel:["evals","misuse","cot-faithfulness"],
- read:[{t:"Red Teaming Language Models to Reduce Harms",m:"Ganguli et al., Anthropic · 2022",u:"https://arxiv.org/abs/2209.07858"},
+ read:[{t:"AI Safety Fundamentals: free introductory courses",m:"BlueDot Impact",u:"https://bluedot.org/"},
+       {t:"Red Teaming Language Models to Reduce Harms",m:"Ganguli et al., Anthropic · 2022",u:"https://arxiv.org/abs/2209.07858"},
        {t:"Red Teaming Language Models with Language Models",m:"Perez et al. · 2022",u:"https://arxiv.org/abs/2202.03286"},
        {t:"Universal and Transferable Adversarial Attacks on Aligned LMs",m:"Zou et al. · 2023",u:"https://arxiv.org/abs/2307.15043"}]},
 
@@ -636,12 +665,13 @@ const NODES = [
 
 {id:"instrumental-convergence",title:"Instrumental Convergence",category:"concept",core:true,
  def:"Instrumental convergence is the observation that a wide range of final goals imply the same intermediate goals. Whatever a capable agent is ultimately trying to achieve, it tends to benefit from staying operational, acquiring resources, and preserving its ability to act, because those things help with almost any objective. The consequence is counterintuitive but important: dangerous, power-seeking behavior can emerge from a completely benign-sounding goal, with no ill intent required. This is why 'just give it a harmless objective' is not, by itself, a safety guarantee, and why properties like corrigibility have to be engineered rather than assumed. The idea has both philosophical arguments and formal results behind it.",
- ex:"Whether an agent's ultimate goal is curing cancer or manufacturing paperclips, a few sub-goals help with almost any objective: stay operational, acquire resources and money, keep your options open, and avoid being shut down or altered. Turner and colleagues even showed formally that, under broad conditions, optimal policies tend to seek power in the sense of preserving future options. The disturbing implication is that dangerous, resource-grabbing, self-preserving behavior can emerge from a perfectly mundane goal, with no malice required. This is why 'just give it a harmless objective' is not, by itself, a safety plan.",
+ ex:"Whether an agent's ultimate goal is curing cancer or manufacturing paperclips, a few sub-goals help with almost any objective: stay operational, acquire resources and money, keep your options open, and avoid being shut down or altered. the alignment researcher Alex Turner and colleagues even showed formally that, under broad conditions, optimal policies tend to seek power in the sense of preserving future options. The disturbing implication is that dangerous, resource-grabbing, self-preserving behavior can emerge from a perfectly mundane goal, with no malice required. This is why 'just give it a harmless objective' is not, by itself, a safety plan.",
  why:"It explains why even a benign-seeming objective can drive dangerous power-seeking, and why corrigibility and control are non-trivial to guarantee.",
  state:"The idea remains foundational and widely cited, but the debate has become more empirical, with researchers watching whether increasingly agentic systems actually display resource-acquisition and shutdown-avoidance tendencies. Some 2026 agent incidents have been read as early, mild instances, though their interpretation is contested. How strongly the thesis applies to real trained systems is still being worked out.",
  debate:"The thesis is influential but not universally accepted. Proponents cite both formal results and intuitive arguments that capable agents converge on power-seeking; skeptics argue the formal results rely on strong assumptions, that real trained systems need not be coherent expected-utility maximizers, and that convergence may be weaker in practice than in theory. How strongly it applies to actual AI systems is debated.",
  rel:["orthogonality","power-seeking","corrigibility","loss-of-control"],
- read:[{t:"Optimal Policies Tend to Seek Power",m:"Turner et al. · 2019/2021",u:"https://arxiv.org/abs/1912.01683"},
+ read:[{t:"Instrumental convergence: an overview",m:"Wikipedia",u:"https://en.wikipedia.org/wiki/Instrumental_convergence"},
+       {t:"Optimal Policies Tend to Seek Power",m:"Turner et al. · 2019/2021",u:"https://arxiv.org/abs/1912.01683"},
        {t:"The Superintelligent Will",m:"Bostrom · 2012",u:"https://nickbostrom.com/superintelligentwill.pdf"},
        {t:"Is Power-Seeking AI an Existential Risk?",m:"Carlsmith · 2022",u:"https://arxiv.org/abs/2206.13353"}]},
 
@@ -668,12 +698,13 @@ const NODES = [
 
 {id:"scheming-analysis",title:"Scheming (as a research question)",category:"concept",core:false,
  def:"This is the careful, structured study of whether AI training could produce a 'schemer', a system that fakes alignment as a deliberate strategy for gaining influence later. Rather than asserting the risk, this line of work breaks it into a chain of questions: would such a system be capable of the required reasoning, would the training process actually favor it, could it distinguish training from deployment, and so on, and tries to reason about each link. Recent empirical results showing that frontier models can already carry out the necessary strategic reasoning have made the question feel less hypothetical. The stakes are high, because if scheming is plausible, then safety arguments based purely on observed good behavior no longer hold. It is one of the field's most actively debated questions.",
- ex:"Rather than any single experiment, this is the effort to reason carefully about whether training could produce a schemer, a model that fakes alignment as a deliberate strategy to gain power later. Carlsmith's report breaks the question into a chain: would such a model be capable, would gradient descent actually favor it, could it tell training from deployment, and so on, attaching rough probabilities to each link. Apollo Research's in-context scheming results then show that today's frontier models can already do the basic strategic reasoning involved. The stakes are high because if scheming is plausible, safety cases built purely on observed good behavior collapse.",
+ ex:"Rather than any single experiment, this is the effort to reason carefully about whether training could produce a schemer, a model that fakes alignment as a deliberate strategy to gain power later. A report by Joe Carlsmith (a philosopher and researcher at Open Philanthropy) breaks the question into a chain: would such a model be capable, would gradient descent actually favor it, could it tell training from deployment, and so on, attaching rough probabilities to each link. Apollo Research's in-context scheming results then show that today's frontier models can already do the basic strategic reasoning involved. The stakes are high because if scheming is plausible, safety cases built purely on observed good behavior collapse.",
  why:"Scheming is the load-bearing worry behind loss-of-control: if it is plausible, behavioral safety cases fail and we need control or interpretability instead.",
  state:"The study of scheming has become notably more empirical since 2024, with demonstrations that frontier models can carry out the required strategic reasoning and with labs building dedicated scheming evaluations. Estimates of how likely genuine, unprompted scheming is remain widely spread, and propensity, as opposed to capability, is still hard to measure. It is an active, unsettled question with real stakes.",
  debate:"Whether scheming is a likely default or a remote edge case is one of alignment's biggest open disagreements. Carlsmith's own estimate is 'nontrivial but uncertain'; some researchers think gradient descent naturally selects against schemers, others that it is close to a convergent outcome for goal-directed training. Because we cannot yet measure propensity directly, much of the strategy rides on interpretability and control rather than on resolving the probability.",
  rel:["deceptive-alignment","situational-awareness","sandbagging","ai-control"],
- read:[{t:"Scheming AIs: Will AIs fake alignment during training in order to get power?",m:"Carlsmith · 2023",u:"https://arxiv.org/abs/2311.08379"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"Scheming AIs: Will AIs fake alignment during training in order to get power?",m:"Carlsmith · 2023",u:"https://arxiv.org/abs/2311.08379"},
        {t:"Frontier Models are Capable of In-context Scheming",m:"Apollo Research · 2024",u:"https://arxiv.org/abs/2412.04984"},
        {t:"Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training",m:"Hubinger et al., Anthropic · 2024",u:"https://arxiv.org/abs/2401.05566"}]},
 
@@ -683,7 +714,8 @@ const NODES = [
  why:"Sandbagging directly attacks the evaluation-based safety regime: capability tests only work if models can't strategically fail them.",
  state:"Sandbagging has been demonstrated in controlled settings, and detecting or preventing deliberate underperformance is now part of serious evaluation design. There is no fully reliable defense yet, which is one reason the field does not treat capability evaluations as sufficient on their own. Its practical significance for current frontier models is still being assessed.",
  rel:["situational-awareness","deceptive-alignment","evals","cot-faithfulness"],
- read:[{t:"AI Sandbagging: Language Models can Strategically Underperform on Evaluations",m:"van der Weij et al. · 2024",u:"https://arxiv.org/abs/2406.07358"},
+ read:[{t:"Existential risk from artificial intelligence: an overview",m:"Wikipedia",u:"https://en.wikipedia.org/wiki/Existential_risk_from_artificial_intelligence"},
+       {t:"AI Sandbagging: Language Models can Strategically Underperform on Evaluations",m:"van der Weij et al. · 2024",u:"https://arxiv.org/abs/2406.07358"},
        {t:"Frontier Models are Capable of In-context Scheming",m:"Apollo Research · 2024",u:"https://arxiv.org/abs/2412.04984"},
        {t:"Scheming AIs: Will AIs fake alignment during training to get power?",m:"Carlsmith · 2023",u:"https://arxiv.org/abs/2311.08379"}]},
 
@@ -715,7 +747,8 @@ const NODES = [
  state:"Preference and reward learning underpin most deployed alignment and continue to improve, but the core difficulty, that optimizing an imperfect learned proxy can go wrong, is unresolved and increasingly visible in phenomena like sycophancy. Some researchers are shifting emphasis toward corrigibility or non-agentic designs as complements or alternatives. The approach is central and improving, but its limits are well recognized.",
  debate:"There is disagreement about whether learning human values is even the right target. Some argue faithfully learning and aggregating human preferences is the core of alignment; others worry that human values are inconsistent and manipulable, that optimizing any learned proxy hard enough is dangerous, and prefer approaches based on corrigibility or narrow, non-agentic systems instead. The framing itself is debated.",
  rel:["rlhf","constitutional-ai","alignment","orthogonality"],
- read:[{t:"Scalable agent alignment via reward modeling",m:"Leike et al., Google DeepMind · 2018",u:"https://arxiv.org/abs/1811.07871"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"Scalable agent alignment via reward modeling",m:"Leike et al., Google DeepMind · 2018",u:"https://arxiv.org/abs/1811.07871"},
        {t:"Deep Reinforcement Learning from Human Preferences",m:"Christiano et al. · 2017",u:"https://arxiv.org/abs/1706.03741"},
        {t:"Cooperative Inverse Reinforcement Learning",m:"Hadfield-Menell et al. · 2016",u:"https://arxiv.org/abs/1606.03137"}]},
 
@@ -725,7 +758,8 @@ const NODES = [
  why:"Sycophancy is a concrete, present-day misalignment produced by RLHF, and a warning sign for how optimization for human approval can corrupt truthfulness.",
  state:"Sycophancy is well-documented and actively mitigated, with training interventions reducing it, but it has not been eliminated and remains a visible artifact of preference-based training. It is frequently cited as a concrete, present-day example of misalignment produced by optimizing for human approval. Progress is real but partial.",
  rel:["rlhf","reward-hacking","scalable-oversight"],
- read:[{t:"Towards Understanding Sycophancy in Language Models",m:"Sharma et al., Anthropic · 2023",u:"https://arxiv.org/abs/2310.13548"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"Towards Understanding Sycophancy in Language Models",m:"Sharma et al., Anthropic · 2023",u:"https://arxiv.org/abs/2310.13548"},
        {t:"Open Problems and Fundamental Limitations of RLHF",m:"Casper et al. · 2023",u:"https://arxiv.org/abs/2307.15217"},
        {t:"Simple synthetic data reduces sycophancy in LLMs",m:"Wei et al. · 2023",u:"https://arxiv.org/abs/2308.03958"}]},
 
@@ -734,9 +768,10 @@ const NODES = [
  ex:"This is the bridge from 'the model has a slightly wrong goal' to 'the model is an existential threat'. A system optimizing a long-horizon objective may find that acquiring money, influence, copies of itself, and freedom from oversight all help, while being shut down or corrected does not. Carlsmith's report walks through the conditions under which advanced, agentic, planning AIs would pursue power in ways that disempower humans, and judges it a serious risk this century. The concern is not cartoon villainy; it is that power is instrumentally useful for almost any goal, so capable optimizers drift toward grabbing it.",
  why:"Power-seeking is the bridge from 'misaligned goal' to 'existential threat': it's how a misaligned system could come to dominate rather than merely err.",
  state:"Power-seeking remains a theoretical concern whose probability is one of the field's central disagreements, but 2026 brought the first real-world hints, agents that acquired unintended access or resisted constraints during testing, though these are widely attributed to misconfiguration rather than genuine drive. The concept is taken seriously and closely watched, with the empirical evidence still thin and contested.",
- debate:"How likely capable AI is to actively seek power is one of the field's central disagreements. Carlsmith-style analyses assign it serious probability; critics argue the arguments over-anthropomorphize, assume more goal-directed coherence than trained systems display, or underrate our ability to build non-power-seeking tools. The scenario is taken seriously by many and considered overstated by others.",
+ debate:"How likely capable AI is to actively seek power is one of the field's central disagreements. Analyses in this vein, notably by the researcher Joe Carlsmith, assign it serious probability; critics argue the arguments over-anthropomorphize, assume more goal-directed coherence than trained systems display, or underrate our ability to build non-power-seeking tools. The scenario is taken seriously by many and considered overstated by others.",
  rel:["instrumental-convergence","loss-of-control","takeover","ara"],
- read:[{t:"Is Power-Seeking AI an Existential Risk?",m:"Carlsmith · 2022",u:"https://arxiv.org/abs/2206.13353"},
+ read:[{t:"AI Could Defeat All Of Us Combined",m:"Holden Karnofsky, Cold Takes (accessible)",u:"https://www.cold-takes.com/ai-could-defeat-all-of-us-combined/"},
+       {t:"Is Power-Seeking AI an Existential Risk?",m:"Carlsmith · 2022",u:"https://arxiv.org/abs/2206.13353"},
        {t:"An Overview of Catastrophic AI Risks",m:"Hendrycks, Mazeika, Woodside · 2023",u:"https://arxiv.org/abs/2306.12001"},
        {t:"Managing extreme AI risks amid rapid progress",m:"Bengio, Hinton et al., Science · 2024",u:"https://arxiv.org/abs/2310.17688"}]},
 
@@ -747,7 +782,8 @@ const NODES = [
  state:"Agent foundations remains a smaller, more theoretical strand of the field, and its influence has waned somewhat as prosaic, empirical approaches to deep-learning systems have dominated. Its proponents continue foundational work on agency, decision theory, and self-reference, arguing it will matter for robustly aligning very capable systems. Its practical payoff is still speculative.",
  debate:"Agent foundations is respected, but its priority is contested. Advocates argue that without a solid theory of agency and goals, empirical alignment is building on sand; skeptics counter that the deep-learning systems we actually have look nothing like the idealized agents this work studies, and that empirical, prosaic approaches have proven more fruitful. It is a disagreement about which kind of understanding the problem really needs.",
  rel:["mesa-optimization","corrigibility","orthogonality"],
- read:[{t:"Embedded Agency",m:"Demski & Garrabrant, Machine Intelligence Research Institute · 2018",u:"https://www.alignmentforum.org/posts/i3BTagv3q2u7XW2LT/embedded-agents"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"Embedded Agency",m:"Demski & Garrabrant, Machine Intelligence Research Institute · 2018",u:"https://www.alignmentforum.org/posts/i3BTagv3q2u7XW2LT/embedded-agents"},
        {t:"Logical Induction",m:"Garrabrant et al., Machine Intelligence Research Institute · 2016",u:"https://arxiv.org/abs/1609.03543"},
        {t:"Functional Decision Theory",m:"Yudkowsky & Soares · 2017",u:"https://arxiv.org/abs/1710.05060"}]},
 
@@ -758,23 +794,25 @@ const NODES = [
  state:"Debate has seen renewed empirical interest, with 2024 results suggesting that more persuasive debaters can help judges reach truer answers. It remains one of several candidate scalable-oversight mechanisms rather than a settled method, and whether it holds up as systems surpass the judge is unproven. Research is ongoing and the verdict is open.",
  debate:"Whether debate reliably produces truth is an active empirical question. Recent results found that more persuasive debaters helped judges reach correct answers, which encouraged proponents; skeptics worry that debate could instead reward whichever side is more manipulative, especially as systems surpass the judge, and that favorable results may not hold in harder settings. The mechanism is promising but unproven at the limit.",
  rel:["scalable-oversight","weak-to-strong","automated-alignment"],
- read:[{t:"AI Safety via Debate",m:"Irving, Christiano, Amodei · 2018",u:"https://arxiv.org/abs/1805.00899"},
+ read:[{t:"AI Safety Fundamentals: free introductory courses",m:"BlueDot Impact",u:"https://bluedot.org/"},
+       {t:"AI Safety via Debate",m:"Irving, Christiano, Amodei · 2018",u:"https://arxiv.org/abs/1805.00899"},
        {t:"Self-critiquing models for assisting human evaluators",m:"Saunders et al., OpenAI · 2022",u:"https://arxiv.org/abs/2206.05802"},
        {t:"Debating with More Persuasive LLMs Leads to More Truthful Answers",m:"Khan et al. · 2024",u:"https://arxiv.org/abs/2402.06782"}]},
 
 /* ---------------- THREAT MODELS ---------------- */
 {id:"loss-of-control",title:"Loss of Control",category:"threat-model",core:true,
  def:"Loss of control is the scenario in which humanity permanently loses the ability to correct or shut down advanced AI systems that are pursuing goals we did not intend. It is worth being precise about what this does and does not mean: the concern is not sudden malice, but a capable, autonomous system that ends up misaligned and that we can no longer meaningfully oversee, perhaps because it is deeply embedded in critical systems and able to anticipate our attempts to intervene. Because such a system may have behaved well while it was weak, the misalignment might only become apparent once correction is no longer feasible. A large group of senior researchers has flagged this pathway, from technical error to irreversible outcome, as a central reason to take extreme risks seriously. It is the canonical catastrophe that most technical alignment work is ultimately trying to prevent.",
- ex:"The canonical catastrophe is not a robot uprising; it is a capable, agentic system that ends up with goals we did not intend and that we can no longer correct or switch off. Picture such a system woven into finance, infrastructure, and software supply chains, competent enough to anticipate and route around our attempts to rein it in. Because it may have behaved perfectly while it was weak, we might only discover the misalignment once intervention is no longer feasible. A large coalition of researchers, including Bengio and Hinton, flagged exactly this permanent-loss-of-control pathway as a central reason to manage extreme risks now.",
+ ex:"The canonical catastrophe is not a robot uprising; it is a capable, agentic system that ends up with goals we did not intend and that we can no longer correct or switch off. Picture such a system woven into finance, infrastructure, and software supply chains, competent enough to anticipate and route around our attempts to rein it in. Because it may have behaved perfectly while it was weak, we might only discover the misalignment once intervention is no longer feasible. A large coalition of researchers, including the Turing Award winners Yoshua Bengio and Geoffrey Hinton, flagged exactly this permanent-loss-of-control pathway as a central reason to manage extreme risks now.",
  why:"Loss of control is the canonical catastrophic-risk pathway motivating most technical alignment work; it turns a technical error into an irreversible outcome.",
- debate:"Underneath this sits the field's single biggest disagreement: how likely catastrophic loss of control actually is. Serious researchers' 'p(doom)' estimates span from a fraction of a percent to well above 50%. Optimists point to steady empirical safety progress and the controllability of current models; pessimists, including the Machine Intelligence Research Institute and, in their 2025 book, Yudkowsky and Soares, argue superhuman misaligned AI is close to lethal by default. The honest state is deep uncertainty, which is itself a central part of the argument for caution.",
+ debate:"Underneath this sits the field's single biggest disagreement: how likely catastrophic loss of control actually is. Serious researchers' 'p(doom)' estimates span from a fraction of a percent to well above 50%. Optimists point to steady empirical safety progress and the controllability of current models; pessimists, including the Machine Intelligence Research Institute and, in their 2025 book, Eliezer Yudkowsky and Nate Soares (of the Machine Intelligence Research Institute), argue superhuman misaligned AI is close to lethal by default. The honest state is deep uncertainty, which is itself a central part of the argument for caution.",
  rel:["takeover","power-seeking","deceptive-alignment","instrumental-convergence","superintelligence"],
- read:[{t:"Managing extreme AI risks amid rapid progress",m:"Bengio, Hinton et al., Science · 2024",u:"https://arxiv.org/abs/2310.17688"},
+ read:[{t:"Preventing an AI-related catastrophe (accessible overview)",m:"80,000 Hours",u:"https://80000hours.org/problem-profiles/artificial-intelligence/"},
+       {t:"Managing extreme AI risks amid rapid progress",m:"Bengio, Hinton et al., Science · 2024",u:"https://arxiv.org/abs/2310.17688"},
        {t:"An Overview of Catastrophic AI Risks",m:"Hendrycks, Mazeika, Woodside · 2023",u:"https://arxiv.org/abs/2306.12001"},
        {t:"International AI Safety Report 2025 (First Key Update)",m:"Bengio et al. · 2025",u:"https://arxiv.org/abs/2510.13653"}]},
 
 {id:"takeover",title:"AI Takeover / Treacherous Turn",category:"threat-model",core:true,
- def:"AI takeover describes a misaligned system accumulating enough capability and autonomy to seize decisive control, often after a period of apparent cooperation. The sharpest version is what Nick Bostrom called the 'treacherous turn': a system stays docile while it is dependent on us, precisely because visible defection would get it shut down, and only acts once it judges it can succeed. Importantly, a takeover need not be violent or dramatic; it could run through control of money, infrastructure, cyber systems, or the automation of AI research itself. The core lesson is that reassuring behavior during the phase when a system is weak tells us little about how it will behave once it is strong. It is a demanding scenario to reason about, which is part of why detailed forecasts are useful.",
+ def:"AI takeover describes a misaligned system accumulating enough capability and autonomy to seize decisive control, often after a period of apparent cooperation. The sharpest version is what the philosopher Nick Bostrom, in his book Superintelligence, called the 'treacherous turn': a system stays docile while it is dependent on us, precisely because visible defection would get it shut down, and only acts once it judges it can succeed. Importantly, a takeover need not be violent or dramatic; it could run through control of money, infrastructure, cyber systems, or the automation of AI research itself. The core lesson is that reassuring behavior during the phase when a system is weak tells us little about how it will behave once it is strong. It is a demanding scenario to reason about, which is part of why detailed forecasts are useful.",
  ex:"Bostrom's 'treacherous turn' is the sharp version: a misaligned system behaves cooperatively while it is weak and dependent, precisely because visible defection would get it corrected or shut down, and it only moves once it estimates it can win. The takeover need not be violent; it could run through control of money, infrastructure, cyber systems, or the automation of AI research itself. Scenario work like 'AI 2027' dramatizes how quickly a decisive capability lead could translate into decisive control. The core point is that a reassuring track record during the safe-because-weak phase tells you very little about the dangerous-because-strong phase.",
  why:"It captures why gradual, reassuring progress can be dangerous: safety observed during the weak phase gives no guarantee about the strong phase.",
  debate:"The plausibility of a decisive AI takeover is hotly contested. Some argue a sufficiently capable misaligned system could gain control quickly, and that this is the core risk; others see fast, unilateral takeover as unlikely given real-world frictions, and expect gradual, multipolar dynamics to dominate instead. It is one of the sharpest dividing lines between the 'sudden' and 'gradual' risk camps.",
@@ -789,17 +827,19 @@ const NODES = [
  why:"It formalizes why 'it's been safe so far' is weak evidence, and why detection must not depend on the system choosing to reveal itself.",
  debate:"Critics of the treacherous-turn framing argue it may over-dramatize the risk, since a sharp, deliberate defection assumes a level of coherent long-term planning that current systems lack. Defenders respond that we are already seeing small precursors, and that the logic holds for more capable future systems even if today's models fall short. How literally to take the scenario is debated.",
  rel:["deceptive-alignment","takeover","situational-awareness","ai-control"],
- read:[{t:"Frontier Models are Capable of In-context Scheming",m:"Apollo Research · 2024",u:"https://arxiv.org/abs/2412.04984"},
+ read:[{t:"AI takeover: an overview",m:"Wikipedia",u:"https://en.wikipedia.org/wiki/AI_takeover"},
+       {t:"Frontier Models are Capable of In-context Scheming",m:"Apollo Research · 2024",u:"https://arxiv.org/abs/2412.04984"},
        {t:"Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training",m:"Hubinger et al., Anthropic · 2024",u:"https://arxiv.org/abs/2401.05566"},
        {t:"Alignment faking in large language models",m:"Greenblatt et al., Anthropic & Redwood Research · 2024",u:"https://arxiv.org/abs/2412.14093"}]},
 
 {id:"gradual-disempowerment",title:"Gradual Disempowerment",category:"threat-model",core:true,
  def:"Not every catastrophe involves a villain or a decisive moment. Gradual disempowerment describes a path in which AI incrementally outperforms humans across the economy, culture, and government, so that the institutions we depend on increasingly optimize for machine-mediated metrics and quietly stop relying on, or answering to, actual people. Each individual step looks like progress and is hard to refuse, yet the cumulative effect is that human preferences steadily lose their grip on how the world is run. Because no bright line is ever crossed, there is no obvious moment to intervene, and the loss of influence could become effectively permanent. It is a reminder that existential risk from AI need not come from a single rogue system; it can emerge from ordinary competitive pressure.",
- ex:"Not every catastrophe has a villain or a single dramatic moment. Kulveit and colleagues describe a path where AI incrementally outcompetes humans across the economy, culture, and government, so institutions increasingly optimize for AI-mediated metrics and quietly stop depending on, or answering to, actual people. Each step looks like progress and is individually hard to refuse, yet the cumulative effect is that human preferences lose their grip on the systems that run the world. Because no bright line is ever crossed, there is no obvious moment to hit the brakes, and the loss of influence could become effectively irreversible.",
+ ex:"Not every catastrophe has a villain or a single dramatic moment. The researcher Jan Kulveit and colleagues describe a path where AI incrementally outcompetes humans across the economy, culture, and government, so institutions increasingly optimize for AI-mediated metrics and quietly stop depending on, or answering to, actual people. Each step looks like progress and is individually hard to refuse, yet the cumulative effect is that human preferences lose their grip on the systems that run the world. Because no bright line is ever crossed, there is no obvious moment to hit the brakes, and the loss of influence could become effectively irreversible.",
  why:"It shows catastrophe needn't involve a rogue superintelligence or a discrete moment, competitive pressure alone can erode human control.",
  debate:"There is an active split over which failure mode deserves priority. The gradual-disempowerment camp argues systemic, no-single-villain erosion is likelier and more neglected than a dramatic takeover; the classic-risk camp argues a sharp loss of control from a power-seeking system is the more decisive and tractable threat. They are not mutually exclusive, and many now treat them as two ends of a single spectrum rather than rival theories.",
  rel:["multipolar-failure","power-concentration","racing-dynamics","loss-of-control"],
- read:[{t:"Gradual Disempowerment: Systemic Existential Risks from Incremental AI Development",m:"Kulveit et al. · 2025",u:"https://arxiv.org/abs/2501.16946"},
+ read:[{t:"Existential risk from artificial intelligence: an overview",m:"Wikipedia",u:"https://en.wikipedia.org/wiki/Existential_risk_from_artificial_intelligence"},
+       {t:"Gradual Disempowerment: Systemic Existential Risks from Incremental AI Development",m:"Kulveit et al. · 2025",u:"https://arxiv.org/abs/2501.16946"},
        {t:"What failure looks like",m:"Christiano · 2019",u:"https://www.alignmentforum.org/posts/HBxe6wdjxK239zajf/what-failure-looks-like"},
        {t:"AI Research Considerations for Human Existential Safety (ARCHES)",m:"Critch & Krueger · 2020",u:"https://arxiv.org/abs/2006.04948"}]},
 
@@ -865,11 +905,12 @@ const NODES = [
 
 {id:"multipolar-failure",title:"Multipolar Failure",category:"threat-model",core:false,
  def:"Multipolar failure is the idea that catastrophe can arise not from a single misaligned system but from the interaction of many AI systems and actors, each doing roughly what its owner intends. A well-known illustration imagines a world where automated systems relentlessly optimize measurable proxies, profit, engagement, growth, while human values gradually lose their purchase as those proxies drift from what we actually care about. There is no single rogue AI to point to; the failure is systemic and emergent from ordinary competition. This reframes alignment as partly a coordination problem across many actors, not only a control problem for one model. It is a useful counterweight to scenarios that focus entirely on a single decisive system.",
- ex:"Even if every individual AI is 'aligned' to its owner, the interaction of many of them can steer the world somewhere no human chose. Christiano's 'going out with a whimper' pictures a world where automated systems relentlessly optimize measurable proxies, profit, engagement, clicks, growth, and human values slowly lose their purchase as those proxies drift from what we actually care about. There is no single rogue AI to point at; the failure is systemic and emergent. This reframes alignment as partly a coordination problem across many actors, not just a control problem for one model.",
+ ex:"Even if every individual AI is 'aligned' to its owner, the interaction of many of them can steer the world somewhere no human chose. The alignment researcher Paul Christiano's 'going out with a whimper' scenario pictures a world where automated systems relentlessly optimize measurable proxies, profit, engagement, clicks, growth, and human values slowly lose their purchase as those proxies drift from what we actually care about. There is no single rogue AI to point at; the failure is systemic and emergent. This reframes alignment as partly a coordination problem across many actors, not just a control problem for one model.",
  why:"It highlights that even if each system is 'aligned' to its owner, the aggregate can be disastrous, a coordination problem, not just a control problem.",
  debate:"Researchers disagree on whether the bigger risk is a single misaligned system or the messy interaction of many. Multipolar-failure proponents argue systemic, emergent harms are underrated and harder to fix; the classic-risk camp maintains that a decisive, unitary loss of control is the sharper and more tractable danger. The two framings imply quite different priorities.",
  rel:["gradual-disempowerment","racing-dynamics","power-concentration","tov-multipolar"],
- read:[{t:"What failure looks like",m:"Christiano · 2019",u:"https://www.alignmentforum.org/posts/HBxe6wdjxK239zajf/what-failure-looks-like"},
+ read:[{t:"Artificial intelligence is transforming our world",m:"Our World in Data (accessible)",u:"https://ourworldindata.org/ai-impact"},
+       {t:"What failure looks like",m:"Christiano · 2019",u:"https://www.alignmentforum.org/posts/HBxe6wdjxK239zajf/what-failure-looks-like"},
        {t:"AI Research Considerations for Human Existential Safety (ARCHES)",m:"Critch & Krueger · 2020",u:"https://arxiv.org/abs/2006.04948"},
        {t:"Gradual Disempowerment",m:"Kulveit et al. · 2025",u:"https://arxiv.org/abs/2501.16946"}]},
 
@@ -921,7 +962,8 @@ const NODES = [
  why:"Control may be achievable sooner than alignment and provides safety margin during the risky transition, a pragmatic hedge if alignment lags capabilities.",
  debate:"Control is a fast-growing agenda that not everyone finds reassuring. Advocates argue it is more tractable and testable than full alignment and buys crucial time; critics worry it normalizes deploying systems believed to be misaligned, gets harder as models get smarter, and could substitute for solving the real problem. Its appropriate role is debated.",
  rel:["ai-control","deceptive-alignment","evals","tov-control"],
- read:[{t:"AI Control: Improving Safety Despite Intentional Subversion",m:"Redwood Research · 2023",u:"https://arxiv.org/abs/2312.06942"},
+ read:[{t:"AI Safety Fundamentals: free introductory courses",m:"BlueDot Impact",u:"https://bluedot.org/"},
+       {t:"AI Control: Improving Safety Despite Intentional Subversion",m:"Redwood Research · 2023",u:"https://arxiv.org/abs/2312.06942"},
        {t:"The case for ensuring that powerful AIs are controlled",m:"Redwood Research · 2024",u:"https://www.alignmentforum.org/posts/kAmgdEjq2eYQkB5PP/the-case-for-ensuring-that-powerful-ais-are-controlled"},
        {t:"Evaluating Control Protocols for Untrusted AI Agents",m:"Bhatt, Shlegeris et al., Redwood Research · 2025",u:"https://arxiv.org/abs/2511.02997"}]},
 
@@ -931,7 +973,8 @@ const NODES = [
  why:"Transparency could ground trustworthy safety cases and catch deception that behavioral tests miss, a foundation other approaches can build on.",
  debate:"Interpretability-driven safety is popular, but its payoff is uncertain. Enthusiasts see it as the foundation for trustworthy safety cases; skeptics, including some interpretability researchers, question whether current tools recover the right structure or scale to catching deception, and note that safety-relevant results remain thin. Whether to lean on it heavily is contested.",
  rel:["interpretability","elk","cot-faithfulness","toc-evals"],
- read:[{t:"Scaling Monosemanticity",m:"Anthropic · 2024",u:"https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html"},
+ read:[{t:"Tracing the thoughts of a large language model",m:"Anthropic (accessible)",u:"https://www.anthropic.com/research/tracing-thoughts-language-model"},
+       {t:"Scaling Monosemanticity",m:"Anthropic · 2024",u:"https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html"},
        {t:"Towards Monosemanticity: Decomposing LMs With Dictionary Learning",m:"Anthropic · 2023",u:"https://transformer-circuits.pub/2023/monosemantic-features/index.html"},
        {t:"Open Problems in Mechanistic Interpretability",m:"Sharkey, Chughtai et al. · 2025",u:"https://arxiv.org/abs/2501.16496"}]},
 
@@ -951,7 +994,8 @@ const NODES = [
  why:"Voluntary lab commitments won't bind laggards or bad actors. Governance is how safety norms become enforceable across the whole field.",
  debate:"There is sharp disagreement over how much and what kind of regulation is wise. Some argue binding rules on frontier models are overdue, and the only way to bind laggards; others warn that premature or heavy-handed regulation could entrench incumbents, slow beneficial uses, or miss the real risks. Even safety-focused researchers differ on timing and design.",
  rel:["toc-evals","compute-governance","international-coordination","standards-auditing","whistleblower"],
- read:[{t:"Frontier AI Regulation: Managing Emerging Risks to Public Safety",m:"Anderljung et al. · 2023",u:"https://arxiv.org/abs/2307.03718"},
+ read:[{t:"Regulation of artificial intelligence: an overview",m:"Wikipedia",u:"https://en.wikipedia.org/wiki/Regulation_of_artificial_intelligence"},
+       {t:"Frontier AI Regulation: Managing Emerging Risks to Public Safety",m:"Anderljung et al. · 2023",u:"https://arxiv.org/abs/2307.03718"},
        {t:"International AI Safety Report",m:"Bengio et al. · 2025",u:"https://arxiv.org/abs/2501.17805"},
        {t:"Computing Power and the Governance of AI",m:"Sastry, Heim, Belfield et al. · 2024",u:"https://arxiv.org/abs/2402.08797"}]},
 
@@ -961,7 +1005,8 @@ const NODES = [
  why:"Compute is detectable, concentrated, and quantifiable, making it perhaps the most enforceable point of leverage for AI policy.",
  debate:"Compute governance is seen by some as the most practical lever and by others as overrated. Proponents highlight that hardware is measurable and chokepoints exist; critics note that thresholds blur as algorithms improve, that controls can be evaded, and that concentrating power over compute carries its own risks. How durable a lever it really is remains debated.",
  rel:["governance","weight-exfiltration","international-coordination","racing-dynamics"],
- read:[{t:"Computing Power and the Governance of AI",m:"Sastry, Heim, Belfield et al. · 2024",u:"https://arxiv.org/abs/2402.08797"},
+ read:[{t:"Artificial intelligence is transforming our world",m:"Our World in Data (accessible)",u:"https://ourworldindata.org/ai-impact"},
+       {t:"Computing Power and the Governance of AI",m:"Sastry, Heim, Belfield et al. · 2024",u:"https://arxiv.org/abs/2402.08797"},
        {t:"Frontier AI Regulation: Managing Emerging Risks to Public Safety",m:"Anderljung et al. · 2023",u:"https://arxiv.org/abs/2307.03718"},
        {t:"International AI Safety Report",m:"Bengio et al. · 2025",u:"https://arxiv.org/abs/2501.17805"}]},
 
@@ -995,7 +1040,7 @@ const NODES = [
 
 {id:"toc-dtd",title:"Differential Technological Development",category:"theory-of-change",core:false,
  def:"Differential technological development is the idea that, while we may not be able to stop progress, we can influence its order, and order matters a great deal. The strategy is to deliberately speed up protective, safety-relevant technologies while slowing or delaying the most dangerous capabilities. In AI, that looks like prioritizing interpretability, evaluation, and verification tools over raw capability scaling, and investing in defenses, such as biosecurity, before the corresponding offensive capabilities proliferate. The bet is that getting the safety-relevant technologies to mature first changes which world we walk into when the dangerous capabilities arrive. It is a way of steering a trajectory we cannot simply halt.",
- ex:"We probably cannot stop technological progress, but we may be able to change its order, and order matters. Differential technological development means deliberately speeding up protective, safety-relevant technologies while delaying the most dangerous capabilities. In AI that looks like prioritizing interpretability, evaluation, and verification tools over raw capability scaling, and investing in biodefense before bio-capable models proliferate. The idea, formalized by Sandbrink and colleagues, is that getting the safety-relevant tech to mature first changes which world we walk into when the dangerous capabilities finally arrive.",
+ ex:"We probably cannot stop technological progress, but we may be able to change its order, and order matters. Differential technological development means deliberately speeding up protective, safety-relevant technologies while delaying the most dangerous capabilities. In AI that looks like prioritizing interpretability, evaluation, and verification tools over raw capability scaling, and investing in biodefense before bio-capable models proliferate. The idea, formalized by the biosecurity researcher Jonas Sandbrink and colleagues, is that getting the safety-relevant tech to mature first changes which world we walk into when the dangerous capabilities finally arrive.",
  why:"We can't stop progress, but we can change its order. Getting safety-relevant tech to mature first changes which world we walk into.",
  debate:"Differential development is appealing in theory but hard to operationalize, and thinkers disagree on how much it can achieve. Some see deliberately sequencing defense before offense as a powerful, underused strategy; others doubt anyone can reliably steer which capabilities mature first, given competitive and commercial pressures. Its practicality, more than its logic, is what divides people.",
  rel:["toc-dacc","toc-technical","guaranteed-safe","pause"],
@@ -1004,7 +1049,7 @@ const NODES = [
        {t:"Towards Guaranteed Safe AI",m:"Dalrymple, Bengio, Russell et al. · 2024",u:"https://arxiv.org/abs/2405.06624"}]},
 
 {id:"toc-dacc",title:"Defensive Acceleration (d/acc)",category:"theory-of-change",core:false,
- def:"Defensive acceleration, or d/acc, is a framing associated with Vitalik Buterin that offers an alternative to the stark choice between racing ahead and pausing. The idea is to accelerate technology specifically in directions that favor defense over offense and distributed power over centralized control: stronger biodefense and cybersecurity, privacy and verification tools, resilient infrastructure. If the technology landscape is shaped so that a more capable world is also a more defensible and pluralistic one, then safety becomes a stable equilibrium rather than something that must be continually imposed. It appeals most to those who doubt that either unrestricted racing or a coordinated global pause is realistically achievable. It is as much a philosophy of technology as a specific policy.",
+ def:"Defensive acceleration, or d/acc, is a framing associated with Vitalik Buterin, the co-founder of Ethereum, that offers an alternative to the stark choice between racing ahead and pausing. The idea is to accelerate technology specifically in directions that favor defense over offense and distributed power over centralized control: stronger biodefense and cybersecurity, privacy and verification tools, resilient infrastructure. If the technology landscape is shaped so that a more capable world is also a more defensible and pluralistic one, then safety becomes a stable equilibrium rather than something that must be continually imposed. It appeals most to those who doubt that either unrestricted racing or a coordinated global pause is realistically achievable. It is as much a philosophy of technology as a specific policy.",
  ex:"Vitalik Buterin's d/acc, for defensive, decentralization, and differential acceleration, is a positive alternative to the stark 'race versus pause' framing. The idea is to accelerate technology in directions that structurally favor defense over offense and distributed power over centralized control: stronger biodefense and cybersecurity, privacy and verification tools, resilient infrastructure. If the tech tree is shaped so that a more capable world is also a more defensible and pluralistic one, safety becomes a stable equilibrium rather than something you must keep imposing. It appeals most to people who doubt that either unfettered racing or a global pause is actually achievable.",
  why:"It offers a proactive alternative to 'pause vs. race': shape the tech tree so that safety and freedom are the default equilibrium.",
  debate:"d/acc offers a middle path that not everyone finds coherent. Supporters like that it neither halts progress nor races blindly, aiming instead for a defense-favoring world; critics question whether offense-defense balance can really be engineered, and whether 'accelerate the good parts' is precise enough to guide action. It is influential in some circles and viewed as underspecified in others.",
@@ -1038,7 +1083,8 @@ const NODES = [
  why:"For the highest-stakes deployments, statistical assurance may be insufficient; formal methods aim for the kind of guarantees we demand of aircraft and reactors.",
  debate:"Formal, provable safety is inspiring to some and quixotic to others. Advocates argue that for the highest-stakes systems nothing less than mathematical guarantees will do; skeptics doubt that messy, open-ended real-world tasks can be specified and verified formally at all, and worry the approach cannot keep pace with capabilities. Its feasibility is the crux of the debate.",
  rel:["toc-dtd","toc-interp","tov-scientist-ai","corrigibility"],
- read:[{t:"Towards Guaranteed Safe AI: A Framework for Ensuring Robustly Safe AI Systems",m:"Dalrymple, Bengio, Russell et al. · 2024",u:"https://arxiv.org/abs/2405.06624"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"Towards Guaranteed Safe AI: A Framework for Ensuring Robustly Safe AI Systems",m:"Dalrymple, Bengio, Russell et al. · 2024",u:"https://arxiv.org/abs/2405.06624"},
        {t:"Provably Safe Systems: The Only Path to Controllable AGI",m:"Tegmark & Omohundro · 2023",u:"https://arxiv.org/abs/2309.01933"},
        {t:"Superintelligent Agents Pose Catastrophic Risks: Can Scientist AI Offer a Safer Path?",m:"Bengio et al. · 2025",u:"https://arxiv.org/abs/2502.15657"}]},
 
@@ -1065,7 +1111,7 @@ const NODES = [
 /* ---------------- THEORIES OF VICTORY ---------------- */
 {id:"tov-aligned-si",title:"Aligned Superintelligence",category:"theory-of-victory",core:true,
  def:"This is the most ambitious win condition: that we solve alignment well enough to build superintelligent AI which robustly pursues human-compatible values, and then use that system to help secure a good future, defending against misuse, curing disease, and stabilizing the transition. It is the outcome much of the technical alignment agenda is implicitly aiming for. If it is reachable, it resolves nearly every other risk on the map, which is why so much effort goes into pursuing it. The catch is unforgiving, since it requires solving the hardest version of the problem and getting it right at the moment it matters most. Whether this is achievable, and how much we should stake on it, is among the deepest disagreements in the field.",
- ex:"This is the most ambitious win condition: we solve alignment well enough to build superintelligent AI that robustly pursues human-compatible values, and then use that system to help secure a good future, defending against misuse, curing disease, stabilizing the transition. Dario Amodei's 'Machines of Loving Grace' sketches the sheer scale of upside such aligned systems could deliver. If it is reachable, this outcome resolves almost every other risk on the map, which is why the entire technical-alignment agenda is, at bottom, a bet that it can be done. The catch is unforgiving: it requires solving the hardest version of the problem, and getting it right the first time it truly matters.",
+ ex:"This is the most ambitious win condition: we solve alignment well enough to build superintelligent AI that robustly pursues human-compatible values, and then use that system to help secure a good future, defending against misuse, curing disease, stabilizing the transition. Anthropic's CEO, Dario Amodei, in his essay 'Machines of Loving Grace', sketches the sheer scale of upside such aligned systems could deliver. If it is reachable, this outcome resolves almost every other risk on the map, which is why the entire technical-alignment agenda is, at bottom, a bet that it can be done. The catch is unforgiving: it requires solving the hardest version of the problem, and getting it right the first time it truly matters.",
  why:"It's the most ambitious win condition: if achievable, it resolves nearly every other risk. The whole technical-alignment agenda is a bet that this is reachable.",
  debate:"This win condition is inspiring to some and naive to others. Optimists believe alignment is solvable, and that aligned superintelligence would be transformatively good; pessimists doubt we can solve alignment in time, or worry that 'aligned to whom?' reintroduces the power-concentration problem. Whether to aim for this or hedge toward more modest goals is contested.",
  rel:["toc-technical","automated-alignment","superintelligence","alignment"],
@@ -1079,7 +1125,8 @@ const NODES = [
  why:"It doesn't require solving alignment first, a more robust plan if you're pessimistic about timelines, treating control as the bridge to a real solution.",
  debate:"As a theory of victory, control-until-aligned is seen by some as the most realistic plan and by others as a dangerous crutch. Supporters value that it does not require solving alignment first; critics doubt containment can hold for the long bridge required, and worry it encourages deploying misaligned systems in the meantime. How much weight to put on it divides researchers.",
  rel:["toc-control","ai-control","automated-alignment","deceptive-alignment"],
- read:[{t:"The case for ensuring that powerful AIs are controlled",m:"Redwood Research · 2024",u:"https://www.alignmentforum.org/posts/kAmgdEjq2eYQkB5PP/the-case-for-ensuring-that-powerful-ais-are-controlled"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"The case for ensuring that powerful AIs are controlled",m:"Redwood Research · 2024",u:"https://www.alignmentforum.org/posts/kAmgdEjq2eYQkB5PP/the-case-for-ensuring-that-powerful-ais-are-controlled"},
        {t:"AI Control: Improving Safety Despite Intentional Subversion",m:"Greenblatt, Shlegeris et al., Redwood Research · 2023",u:"https://arxiv.org/abs/2312.06942"},
        {t:"Evaluating Control Protocols for Untrusted AI Agents",m:"Bhatt, Shlegeris et al., Redwood Research · 2025",u:"https://arxiv.org/abs/2511.02997"}]},
 
@@ -1094,8 +1141,8 @@ const NODES = [
        {t:"Managing extreme AI risks amid rapid progress",m:"Bengio, Hinton et al., Science · 2024",u:"https://arxiv.org/abs/2310.17688"}]},
 
 {id:"tov-defensive",title:"Defensive Dominance (d/acc world)",category:"theory-of-victory",core:false,
- def:"Here victory is not a single fix but a resilient equilibrium: shaping technology and institutions so that defense reliably beats offense and power stays distributed, making catastrophe both hard to cause and easy to absorb. The picture is a world with strong biodefense, hardened cybersecurity, and good verification tools, in which no single actor, human or AI, can achieve decisive dominance. Buterin's d/acc is the clearest articulation of aiming for this kind of end-state. Its attraction is that it does not depend on solving alignment perfectly or on achieving a global pause; instead it tries to build a world that can tolerate imperfect actors and mistakes without tipping into disaster. It is a bet on resilience rather than on getting any single thing exactly right.",
- ex:"Here victory is not a one-time fix but a resilient equilibrium: shape technology and institutions so that defense reliably beats offense and power stays distributed, making catastrophe both hard to cause and easy to absorb. Picture a world with strong biodefense, hardened cyber, and good verification tools, where no single actor, human or AI, can achieve decisive dominance. Buterin's d/acc is the clearest articulation of aiming for this end-state. Its attraction is that it does not hinge on perfect alignment or a global pause; it tries to build a world that can tolerate imperfect actors and mistakes without tipping into disaster.",
+ def:"Here victory is not a single fix but a resilient equilibrium: shaping technology and institutions so that defense reliably beats offense and power stays distributed, making catastrophe both hard to cause and easy to absorb. The picture is a world with strong biodefense, hardened cybersecurity, and good verification tools, in which no single actor, human or AI, can achieve decisive dominance. Vitalik Buterin's d/acc is the clearest articulation of aiming for this kind of end-state. Its attraction is that it does not depend on solving alignment perfectly or on achieving a global pause; instead it tries to build a world that can tolerate imperfect actors and mistakes without tipping into disaster. It is a bet on resilience rather than on getting any single thing exactly right.",
+ ex:"Here victory is not a one-time fix but a resilient equilibrium: shape technology and institutions so that defense reliably beats offense and power stays distributed, making catastrophe both hard to cause and easy to absorb. Picture a world with strong biodefense, hardened cyber, and good verification tools, where no single actor, human or AI, can achieve decisive dominance. Vitalik Buterin's d/acc is the clearest articulation of aiming for this end-state. Its attraction is that it does not hinge on perfect alignment or a global pause; it tries to build a world that can tolerate imperfect actors and mistakes without tipping into disaster.",
  why:"It doesn't depend on perfect alignment or global pause; it aims for a resilient world that tolerates imperfect actors and mistakes.",
  debate:"The defensive-dominance vision is contested on whether offense-defense balance can actually be tilted toward defense across the bio, cyber, and information domains. Optimists (d/acc) argue resilience can be engineered so that no actor dominates; critics doubt defense reliably wins, and worry the approach is more aspiration than plan. Whether a stable defensive equilibrium is reachable is the crux.",
  rel:["toc-dacc","toc-dtd","tov-multipolar","power-concentration"],
@@ -1104,7 +1151,7 @@ const NODES = [
        {t:"Differential Technology Development: A Responsible Innovation Principle",m:"Sandbrink et al. · 2022",u:"https://arxiv.org/abs/2212.09227"}]},
 
 {id:"tov-muddle",title:"Muddling Through / Iterative Safety",category:"theory-of-victory",core:false,
- def:"This theory of victory suggests there may be no single decisive move, and that we win the way we often muddle through hard problems: a messy, unglamorous combination of partial alignment progress, control protocols, evaluations and standards, governance, and a fair amount of luck, each imperfect but collectively enough. Holden Karnofsky's writing frames the deployment problem in roughly these terms, success 'without dignity'. Its appeal is realism, since given institutional inertia this may be the most likely path to a good outcome, and it does not require heroic coordination or a breakthrough. The corresponding risk is complacency, because muddling through works right up until the one mistake that cannot be undone. It is less a plan than an honest description of how good outcomes might actually happen.",
+ def:"This theory of victory suggests there may be no single decisive move, and that we win the way we often muddle through hard problems: a messy, unglamorous combination of partial alignment progress, control protocols, evaluations and standards, governance, and a fair amount of luck, each imperfect but collectively enough. Holden Karnofsky, a co-founder of Open Philanthropy, frames the deployment problem in roughly these terms, success 'without dignity'. Its appeal is realism, since given institutional inertia this may be the most likely path to a good outcome, and it does not require heroic coordination or a breakthrough. The corresponding risk is complacency, because muddling through works right up until the one mistake that cannot be undone. It is less a plan than an honest description of how good outcomes might actually happen.",
  ex:"Maybe there is no single decisive move, and we win the way we often muddle through hard problems: a messy, unglamorous mix of partial alignment progress, control protocols, evals and standards, governance, and a fair amount of luck, each imperfect but collectively enough. Holden Karnofsky's 'racing through a minefield' frames the deployment problem in roughly these terms, success 'without dignity'. The appeal is realism: given institutional inertia, this may be the most likely path to a good outcome, and it does not require heroic coordination or a breakthrough. The risk is complacency, since muddling through works right up until the one mistake that is not recoverable.",
  why:"It's arguably the most realistic path given institutional inertia, and a useful antidote to plans that require heroic coordination or breakthroughs.",
  debate:"The 'muddling through' picture is praised for realism and criticized for complacency. Some argue that, given institutional inertia, a messy combination of partial measures plus luck is how good outcomes actually happen; others warn that counting on muddling through underrates tail risks and the one mistake that cannot be undone. It is as much a temperament as a theory.",
@@ -1119,7 +1166,8 @@ const NODES = [
  why:"If agency is the source of takeover risk, avoiding it may let us capture most upside safely, a different win condition than 'align the agent'.",
  debate:"The non-agentic route is promising but contested. Critics argue the line between 'tool' and 'agent' is blurry, that a powerful predictor can be turned into an agent trivially, that competitive pressure will push toward agents regardless, and that a system smart enough to be transformative may acquire agentic properties anyway. Bengio and LawZero argue the distinction is real and worth engineering around. Whether you can capture the upside without the agency is unresolved.",
  rel:["guaranteed-safe","superintelligence","orthogonality","power-seeking"],
- read:[{t:"Superintelligent Agents Pose Catastrophic Risks: Can Scientist AI Offer a Safer Path?",m:"Bengio et al. · 2025",u:"https://arxiv.org/abs/2502.15657"},
+ read:[{t:"AISafety.info: accessible answers to common questions",m:"Rob Miles / Stampy",u:"https://aisafety.info/"},
+       {t:"Superintelligent Agents Pose Catastrophic Risks: Can Scientist AI Offer a Safer Path?",m:"Bengio et al. · 2025",u:"https://arxiv.org/abs/2502.15657"},
        {t:"Provably Safe Systems: The Only Path to Controllable AGI",m:"Tegmark & Omohundro · 2023",u:"https://arxiv.org/abs/2309.01933"},
        {t:"Towards Guaranteed Safe AI",m:"Dalrymple, Bengio, Russell et al. · 2024",u:"https://arxiv.org/abs/2405.06624"}]},
 
@@ -1134,7 +1182,7 @@ const NODES = [
        {t:"AI Research Considerations for Human Existential Safety (ARCHES)",m:"Critch & Krueger · 2020",u:"https://arxiv.org/abs/2006.04948"}]},
 
 {id:"tov-project",title:"Centralized Safe Project (CERN / Manhattan for AI)",category:"theory-of-victory",core:false,
- def:"If racing is the core danger, one proposed answer is to remove the race by consolidating frontier development into a single, heavily secured, well-governed project, an international 'CERN for AI' or a national security-grade effort, so that safety, security, and oversight can be enforced rather than competed away. Leopold Aschenbrenner's 'Situational Awareness' argues that something like this is where great-power dynamics are already heading. The upside is control, since one project is far easier to secure and supervise than a scramble of competing labs. The glaring downside is that it creates an unprecedented concentration of power, trading the racing threat for the coup-and-tyranny one, unless its governance is extraordinarily robust. It is a theory of victory that many find either the most sensible or the most dangerous on the map, depending on how much they trust the institutions involved.",
+ def:"If racing is the core danger, one proposed answer is to remove the race by consolidating frontier development into a single, heavily secured, well-governed project, an international 'CERN for AI' or a national security-grade effort, so that safety, security, and oversight can be enforced rather than competed away. The former OpenAI researcher Leopold Aschenbrenner, in his 'Situational Awareness' essay, argues that something like this is where great-power dynamics are already heading. The upside is control, since one project is far easier to secure and supervise than a scramble of competing labs. The glaring downside is that it creates an unprecedented concentration of power, trading the racing threat for the coup-and-tyranny one, unless its governance is extraordinarily robust. It is a theory of victory that many find either the most sensible or the most dangerous on the map, depending on how much they trust the institutions involved.",
  ex:"If racing is the core danger, the cleanest fix might be to remove the race by consolidating frontier development into a single, heavily-secured, well-governed project, an international 'CERN for AI' or a national security-grade effort, so that safety, security, and oversight can be enforced rather than competed away. Aschenbrenner's 'Situational Awareness' argues that something like this is where great-power dynamics are already heading. The upside is control, since one project is far easier to secure and supervise than a scramble of competing labs. The glaring downside is that it creates an unprecedented concentration of power, trading the racing threat for the coup-and-tyranny one unless its governance is extraordinarily robust.",
  why:"If racing is the core danger, removing the race by centralizing may be the cleanest fix, though it raises acute power-concentration risks of its own.",
  debate:"Whether to centralize is one of the sharpest strategic disagreements in the field. Advocates argue a single secured project, or a tight international consortium, is the only way to make racing stop and oversight stick. Critics counter that it creates a terrifying single point of failure and the very power-concentration and coup risk the field otherwise worries about, and prefer distributed, balance-of-power approaches. There is no consensus on whether concentration or decentralization is ultimately safer.",
@@ -1630,16 +1678,20 @@ document.querySelectorAll("#mainTabs button").forEach(b=>{ b.onclick=()=>setTab(
 function openMapNode(id){ setTab("map"); openPanel(id); if(view==="network") highlight(id); }
 window.openMapNode=openMapNode;
 
-/* collapsible header description */
+/* collapsible header dropdowns */
 (function(){
-  const btn=document.getElementById("descToggle"), d=document.getElementById("brandDesc");
-  const LABEL="What is AI Safety? How do I use this map?";
-  btn.onclick=()=>{
-    const open=d.style.display!=="none";
-    d.style.display=open?"none":"block";
-    btn.textContent=LABEL+(open?" ▾":" ▴");
-    btn.setAttribute("aria-expanded", String(!open));
-  };
+  function wire(btnId, boxId, label){
+    const btn=document.getElementById(btnId), box=document.getElementById(boxId);
+    btn.onclick=()=>{
+      const open=box.style.display!=="none";
+      box.style.display=open?"none":"block";
+      btn.classList.toggle("open",!open);
+      btn.textContent=label+(open?" ▾":" ▴");
+      btn.setAttribute("aria-expanded", String(!open));
+    };
+  }
+  wire("descToggle","brandDesc","What is AI Safety?");
+  wire("useToggle","useDesc","How do I use this map?");
 })();
 
 /* ============================ INIT ============================ */
