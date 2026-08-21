@@ -112,6 +112,8 @@
   .sec.state{background:rgba(76,155,232,.07); border:1px solid rgba(76,155,232,.30); border-radius:10px; padding:12px 14px; margin-top:20px;}
   .sec.state h3{color:var(--concept);}
   .sec.state p{font-size:13.5px; line-height:1.55; color:#d5e2f0;}
+  a.jargon{color:#8fc3f5; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:2px; cursor:pointer;}
+  a.jargon:hover{color:var(--accent);}
   .reading{display:block; padding:9px 11px; margin-bottom:8px; background:var(--panel2); border:1px solid var(--line); border-radius:8px; text-decoration:none; color:var(--ink); transition:.12s;}
   .reading:hover{border-color:var(--accent); background:#232c37;}
   .reading .rt{font-size:13px; font-weight:600; line-height:1.3;}
@@ -244,6 +246,29 @@
            background:rgba(76,155,232,.15); color:#8fc3f5; border:1px solid rgba(76,155,232,.45);}
   .keyterm{color:#8fc3f5; font-weight:600;}
 
+  /* Systems Map */
+  #systemsArea{position:absolute; inset:0; overflow:auto; display:none; padding:26px 22px 70px;}
+  .sys-wrap{max-width:840px; margin:0 auto;}
+  .sys-wrap h2{font-size:20px; margin:0 0 6px;}
+  .sys-lead{color:var(--muted); font-size:13.5px; line-height:1.6; margin:0 0 12px; max-width:780px;}
+  .sys-diagram{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 14px 6px; margin:14px 0 6px;}
+  .sys-legend{display:flex; gap:18px 22px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin:12px 2px 20px;}
+  .sys-legend span{display:flex; align-items:center; gap:7px;}
+  .sys-legend i{width:22px; height:0; border-top:2px solid; display:inline-block;}
+  .sys-legend b{color:var(--ink); font-weight:600;}
+  .sys-h3{font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--faint); margin:22px 0 9px;}
+  details.sys{background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--faint); border-radius:8px; margin-bottom:8px;}
+  details.sys.r{border-left-color:#e8785a;} details.sys.b{border-left-color:#34b3a4;}
+  details.sys summary{cursor:pointer; list-style:none; padding:12px 14px; font-size:14px; font-weight:600; color:var(--ink); display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  details.sys summary::-webkit-details-marker{display:none;}
+  details.sys .chev{color:var(--faint); font-size:11px; transition:transform .15s;}
+  details.sys[open] .chev{transform:rotate(90deg);}
+  details.sys .sd{padding:0 14px 13px; font-size:13px; line-height:1.6; color:#cbd5e0;}
+  .sys-tag{font-size:10px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; padding:2px 7px; border-radius:5px; margin-right:9px; white-space:nowrap;}
+  .sys-tag.node{background:rgba(154,167,180,.15); color:#c3ccd6;}
+  .sys-tag.r{background:rgba(232,120,90,.16); color:#f0a68d;}
+  .sys-tag.b{background:rgba(52,179,164,.16); color:#7fd6ca;}
+
   @media(max-width:640px){ .brand{width:100%;} #search{width:140px;} .maintabs button{padding:8px 11px;} }
 </style>
 </head>
@@ -271,6 +296,7 @@
         <li>Click any node to light up everything it connects to and open its full details.</li>
         <li>Color shows the category, and the search box plus the "core concepts only" filter help you narrow things down. If you're brand new, start with <b>core concepts only</b>.</li>
         <li><b>How Models Work</b> is a plain-language primer on how AI systems are actually built and what happens when you use one.</li>
+        <li><b>Systems Map</b> steps back from individual ideas to the feedback loops between them, the reinforcing and balancing cycles that shape how the whole system behaves over time.</li>
         <li><b>Glossary</b> lets you look up any term; <b>Flashcards</b> let you test yourself.</li>
         <li>The yellow chips throughout jump you straight to related ideas.</li>
       </ul>
@@ -280,6 +306,7 @@
   <div class="maintabs" id="mainTabs">
     <button data-tab="map" class="active">Map</button>
     <button data-tab="basics">How Models Work</button>
+    <button data-tab="systems">Systems Map</button>
     <button data-tab="glossary">Glossary</button>
     <button data-tab="flash">Flashcards</button>
   </div>
@@ -473,6 +500,102 @@
       <p class="linklabel">Every stage above connects to ideas on the AI Safety Landscape map. Follow any chip to jump straight to that concept.</p>
     </div>
   </div>
+
+  <div id="systemsArea">
+    <div class="sys-wrap">
+      <h2>The systems map</h2>
+      <p class="sys-lead">The main map shows how ideas connect. This view zooms out to how they interact over time. In systems thinking, a complex system's behavior is driven less by any single part than by its feedback loops: circular chains of cause and effect where a change eventually comes back around to influence itself.</p>
+      <p class="sys-lead">Two kinds of loop do most of the work. Reinforcing loops amplify change, so a small push compounds into a large one, a vicious or virtuous cycle. Compound interest is the everyday version: money in a savings account earns interest, which earns more interest, and the balance snowballs (credit-card debt does the same, painfully). Balancing loops resist change, nudging the system back toward some equilibrium, the way a thermostat runs the heat until the room hits the set temperature and then shuts it off. Much of AI safety can be read as a race between the reinforcing loops driving capability and risk, and the balancing loops, mostly governance, evaluation, and alignment, that we are trying to strengthen fast enough to keep up. Read each arrow as "a change here causes a change there": a plus sign means the two move together, a minus sign means one rises as the other falls, and it is the number of minus signs around a loop that decides whether it amplifies or stabilizes.</p>
+
+      <div class="sys-diagram">
+        <svg viewBox="0 0 680 500" width="100%" style="display:block;max-width:820px;margin:0 auto;" role="img" aria-label="Causal loop diagram: reinforcing loops for racing and automated AI research, and a balancing loop for governance and evaluations.">
+          <defs>
+            <marker id="ah-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#e8785a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+            <marker id="ah-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#34b3a4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+          </defs>
+          <path d="M185,124 Q260,150 300,205" fill="none" stroke="#e8785a" stroke-width="1.5" marker-end="url(#ah-r)"/>
+          <path d="M280,205 Q190,150 150,124" fill="none" stroke="#e8785a" stroke-width="1.5" marker-end="url(#ah-r)"/>
+          <path d="M420,205 Q505,150 520,124" fill="none" stroke="#e8785a" stroke-width="1.5" marker-end="url(#ah-r)"/>
+          <path d="M480,124 Q415,150 400,205" fill="none" stroke="#e8785a" stroke-width="1.5" marker-end="url(#ah-r)"/>
+          <path d="M410,259 Q470,295 500,330" fill="none" stroke="#34b3a4" stroke-width="1.5" marker-end="url(#ah-b)"/>
+          <path d="M445,362 Q350,388 255,362" fill="none" stroke="#34b3a4" stroke-width="1.5" marker-end="url(#ah-b)"/>
+          <path d="M140,330 Q95,225 120,124" fill="none" stroke="#34b3a4" stroke-width="1.5" marker-end="url(#ah-b)"/>
+          <text x="255" y="150" text-anchor="middle" font-size="14" fill="#e8785a">+</text>
+          <text x="200" y="150" text-anchor="middle" font-size="14" fill="#e8785a">+</text>
+          <text x="492" y="150" text-anchor="middle" font-size="14" fill="#e8785a">+</text>
+          <text x="428" y="150" text-anchor="middle" font-size="14" fill="#e8785a">+</text>
+          <text x="466" y="298" text-anchor="middle" font-size="14" fill="#34b3a4">+</text>
+          <text x="350" y="381" text-anchor="middle" font-size="14" fill="#34b3a4">+</text>
+          <text x="98" y="225" text-anchor="middle" font-size="14" fill="#34b3a4">−</text>
+          <circle cx="232" cy="176" r="14" fill="#e8785a"/><text x="232" y="176" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill="#0e1116">R1</text>
+          <circle cx="458" cy="172" r="14" fill="#e8785a"/><text x="458" y="172" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill="#0e1116">R2</text>
+          <circle cx="300" cy="300" r="14" fill="#34b3a4"/><text x="300" y="300" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill="#0e1116">B1</text>
+          <rect x="55" y="70" width="185" height="54" rx="8" fill="#1c232d" stroke="#2a333f"/>
+          <text x="147.5" y="91" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="600" fill="#e6edf3">Competitive pressure</text>
+          <text x="147.5" y="109" text-anchor="middle" dominant-baseline="central" font-size="11.5" fill="#9aa7b4">racing dynamics</text>
+          <rect x="440" y="70" width="190" height="54" rx="8" fill="#1c232d" stroke="#2a333f"/>
+          <text x="535" y="91" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="600" fill="#e6edf3">Automated AI R&amp;D</text>
+          <text x="535" y="109" text-anchor="middle" dominant-baseline="central" font-size="11.5" fill="#9aa7b4">AI improving AI</text>
+          <rect x="250" y="205" width="185" height="54" rx="8" fill="#1c232d" stroke="#2a333f"/>
+          <text x="342.5" y="226" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="600" fill="#e6edf3">AI capabilities</text>
+          <text x="342.5" y="244" text-anchor="middle" dominant-baseline="central" font-size="11.5" fill="#9aa7b4">deployed &amp; autonomous</text>
+          <rect x="445" y="330" width="185" height="54" rx="8" fill="#1c232d" stroke="#2a333f"/>
+          <text x="537.5" y="351" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="600" fill="#e6edf3">Risk &amp; scrutiny</text>
+          <text x="537.5" y="369" text-anchor="middle" dominant-baseline="central" font-size="11.5" fill="#9aa7b4">public + government</text>
+          <rect x="60" y="330" width="195" height="54" rx="8" fill="#1c232d" stroke="#2a333f"/>
+          <text x="157.5" y="351" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="600" fill="#e6edf3">Governance &amp; evals</text>
+          <text x="157.5" y="369" text-anchor="middle" dominant-baseline="central" font-size="11.5" fill="#9aa7b4">rules, tests, treaties</text>
+        </svg>
+      </div>
+      <div class="sys-legend">
+        <span><i style="border-color:#e8785a"></i><b>Reinforcing (R)</b> &mdash; amplifies change</span>
+        <span><i style="border-color:#34b3a4"></i><b>Balancing (B)</b> &mdash; resists change</span>
+        <span><b>+</b> factors move together &nbsp;&nbsp; <b>−</b> one rises as the other falls</span>
+      </div>
+
+      <div class="sys-h3">The factors (click to expand)</div>
+      <details class="sys"><summary><span><span class="sys-tag node">Node</span>Competitive pressure</span><span class="chev">▶</span></summary>
+        <div class="sd">The drive among labs and nations to build and deploy faster than their rivals. It is the engine behind the race: whoever slows down to be careful risks falling behind, so caution itself becomes costly.
+          <div><button class="map-link" onclick="openMapNode('racing-dynamics')">Racing Dynamics →</button><button class="map-link" onclick="openMapNode('power-concentration')">Power Concentration →</button></div></div>
+      </details>
+      <details class="sys"><summary><span><span class="sys-tag node">Node</span>AI capabilities</span><span class="chev">▶</span></summary>
+        <div class="sd">How capable frontier systems are, and how much they are actually deployed and allowed to act on their own. It sits at the center of the diagram because nearly every loop runs through it.
+          <div><button class="map-link" onclick="openMapNode('superintelligence')">Superintelligence →</button><button class="map-link" onclick="openMapNode('fast-takeoff')">Takeoff Speed →</button></div></div>
+      </details>
+      <details class="sys"><summary><span><span class="sys-tag node">Node</span>Automated AI R&amp;D</span><span class="chev">▶</span></summary>
+        <div class="sd">The point at which AI meaningfully accelerates AI research itself. This is what could turn steady progress into a fast, compounding takeoff, and it is the most uncertain factor on the diagram.
+          <div><button class="map-link" onclick="openMapNode('fast-takeoff')">Takeoff Speed →</button><button class="map-link" onclick="openMapNode('automated-alignment')">Automated Alignment Research →</button></div></div>
+      </details>
+      <details class="sys"><summary><span><span class="sys-tag node">Node</span>Risk &amp; scrutiny</span><span class="chev">▶</span></summary>
+        <div class="sd">How seriously AI risk is taken, and the public and political attention that follows. Rising capability tends to raise it, and it is the trigger that mobilizes a response, though often only after a visible incident.
+          <div><button class="map-link" onclick="openMapNode('ai-2027')">Scenario Forecasting →</button><button class="map-link" onclick="openMapNode('evals')">Dangerous Capability Evaluations →</button></div></div>
+      </details>
+      <details class="sys"><summary><span><span class="sys-tag node">Node</span>Governance &amp; evals</span><span class="chev">▶</span></summary>
+        <div class="sd">The institutional response: regulation, dangerous-capability evaluations, responsible-scaling commitments, and international coordination. It is the main lever we have for adding a brake to the system.
+          <div><button class="map-link" onclick="openMapNode('governance')">AI Governance &amp; Regulation →</button><button class="map-link" onclick="openMapNode('toc-evals')">Evals &amp; Responsible Scaling →</button><button class="map-link" onclick="openMapNode('international-coordination')">International Coordination →</button></div></div>
+      </details>
+
+      <div class="sys-h3">The loops</div>
+      <details class="sys r"><summary><span><span class="sys-tag r">R1 · reinforcing</span>The race</span><span class="chev">▶</span></summary>
+        <div class="sd">Competitive pressure pushes capability and deployment, which makes rivals feel even more pressure. Left unchecked, a reinforcing loop like this accelerates itself, which is why so much safety strategy is aimed at defusing the race rather than winning it.
+          <div><button class="map-link" onclick="openMapNode('racing-dynamics')">Racing Dynamics →</button></div></div>
+      </details>
+      <details class="sys r"><summary><span><span class="sys-tag r">R2 · reinforcing</span>Intelligence explosion</span><span class="chev">▶</span></summary>
+        <div class="sd">As systems get more capable, they can do more of the work of AI research, producing still more capable systems. If this loop takes hold, progress could compress sharply and leave little time to notice problems or react.
+          <div><button class="map-link" onclick="openMapNode('fast-takeoff')">Takeoff Speed →</button><button class="map-link" onclick="openMapNode('automated-alignment')">Automated Alignment Research →</button></div></div>
+      </details>
+      <details class="sys b"><summary><span><span class="sys-tag b">B1 · balancing</span>Safety brakes</span><span class="chev">▶</span></summary>
+        <div class="sd">Rising capability raises risk and scrutiny, which drives governance, evaluation, and coordination, which in turn dampen the race. It is the stabilizing loop we are counting on, but it only holds if we can strengthen it faster than the reinforcing loops it is trying to counter.
+          <div><button class="map-link" onclick="openMapNode('toc-evals')">Evals &amp; Responsible Scaling →</button><button class="map-link" onclick="openMapNode('governance')">AI Governance &amp; Regulation →</button></div></div>
+      </details>
+
+      <div class="sys-h3">Other loops worth tracing</div>
+      <details class="sys"><summary><span><span class="sys-tag node">More</span>Two loops not drawn above</span><span class="chev">▶</span></summary>
+        <div class="sd"><b>Gradual disempowerment</b> is a reinforcing loop: as AI takes over more economic and cognitive work, human oversight weakens, which lets AI take over still more, with no single dramatic moment. <b>Alignment and control</b> form a balancing loop: rising risk prompts investment in alignment, interpretability, and control, which, if it works, makes systems more trustworthy and lowers the risk again. <b>Defensive acceleration (d/acc)</b> is a related balancing idea, tilting technology toward defense so the system can absorb mistakes rather than be toppled by them.
+          <div><button class="map-link" onclick="openMapNode('gradual-disempowerment')">Gradual Disempowerment →</button><button class="map-link" onclick="openMapNode('ai-control')">AI Control →</button><button class="map-link" onclick="openMapNode('interpretability')">Mechanistic Interpretability →</button><button class="map-link" onclick="openMapNode('toc-dacc')">Defensive Acceleration →</button></div></div>
+      </details>
+    </div>
+  </div>
 </main>
 
 <script>
@@ -505,7 +628,7 @@ const NODES = [
 
 {id:"inner-outer",title:"Inner vs. Outer Alignment",category:"concept",core:true,
  def:"It helps to split alignment into two distinct problems. Outer alignment is about choosing a training objective that genuinely captures what we want; if the objective itself rewards the wrong thing, we have specified the wrong goal. Inner alignment is about what actually happens inside the model during training: even a perfect objective is no guarantee that the system which emerges has internalized that objective, rather than some correlated stand-in that merely produces similar behavior. In other words, you can get the target right on paper and still end up with a model that learned to pursue a subtly different goal. Keeping these two failure points separate is useful, because they call for different solutions, and because the inner problem is the harder and less visible of the two.",
- ex:"Imagine you write a flawless reward function that perfectly captures what you want, so outer alignment is solved. You still have to run gradient descent, which searches for whatever internal circuitry happens to score well on the training data. The model that emerges might pursue a goal that merely correlated with your reward during training. So you can nail the objective on paper and still get a system whose actual internalized goal diverges the moment it is off-distribution.",
+ ex:"It is like hiring someone based on a job interview. You can design a flawless interview that perfectly captures the qualities you want (outer alignment) and still end up with a hire who is simply very good at interviews rather than at the actual job (inner alignment). Getting the target exactly right on paper does not guarantee that the person, or the model, who comes out the other end actually internalized it.",
  why:"It splits alignment into two failure surfaces. Even a flawless objective can produce a dangerously misaligned mind, which is the root of deceptive alignment.",
  state:"The inner/outer distinction remains a standard lens, though researchers increasingly note it was framed for idealized optimizers and maps imperfectly onto large language models. Recent demonstrations of models pursuing goals that only held during training have made the inner problem feel concrete rather than hypothetical. There is still no reliable method for confirming that a model has internalized the intended objective rather than a look-alike.",
  rel:["mesa-optimization","goal-misgeneralization","reward-hacking","deceptive-alignment"],
@@ -600,7 +723,7 @@ const NODES = [
 
 {id:"constitutional-ai",title:"Constitutional AI",category:"concept",core:false,
  def:"Constitutional AI is a training method that reduces reliance on human labels by having the model critique and revise its own responses against an explicit set of written principles, a 'constitution', and then learning from that AI-generated feedback. Instead of paying people to label thousands of harmful examples, the system is guided by stated rules about what a good response looks like. This has two appealing properties: it scales more easily than human labeling, and it makes the values steering the model legible, since the principles are written down and can be read, debated, and revised. It is one concrete answer to the scalable-oversight problem, using the model itself, steered by human-written norms, to help supervise its own behavior.",
- ex:"Instead of paying humans to label thousands of harmful prompts, Anthropic's Constitutional AI has the model critique and rewrite its own responses against an explicit set of written principles, then trains on that AI-generated feedback. A draft answer might be revised to be less evasive or less toxic because a stated principle calls for it. The values steering the model become an auditable document rather than an opaque aggregate of contractor judgments. It is both a scalability trick, less human labeling, and a transparency move, since you can actually read and debate the constitution.",
+ ex:"Rather than having people hand-correct thousands of bad answers, you give the model a short written rulebook, its 'constitution', and have it critique and rewrite its own responses against those principles. It is a bit like a writer editing a rough draft against a style guide instead of waiting for an editor to mark up every line. The payoff is twofold: it needs far less human labeling, and the values doing the steering are written down where anyone can read and argue with them.",
  why:"It makes the values steering a model explicit and auditable, and scales oversight by substituting AI feedback for expensive, inconsistent human labeling.",
  state:"Constitutional and AI-feedback methods are now used in production and have been extended toward incorporating public input into the guiding principles. They are viewed as a meaningful improvement in scalability and transparency, though questions about who sets the principles, and whether principle-following persists at higher capability, remain open. The approach is maturing but not considered a complete solution.",
  debate:"Constitutional AI is widely adopted, but its sufficiency is debated. Supporters see explicit, revisable principles plus AI feedback as a scalable, transparent improvement over pure human labeling; critics ask who writes the constitution, worry that AI feedback can bake in the model's own biases, and doubt that principle-following will hold for far more capable systems. It is seen as a real advance, not a complete answer.",
@@ -647,7 +770,7 @@ const NODES = [
 
 {id:"red-teaming",title:"Red-Teaming",category:"concept",core:false,
  def:"Red-teaming is deliberate, adversarial testing that tries to make a model misbehave, in order to find its weaknesses before real users or attackers do. Red-teamers use jailbreaks, role-play framings, obfuscated prompts, and multi-step manipulations to coax out content a model is supposed to refuse. This matters because systems that look perfectly safe under ordinary use can fail badly under pressure, which is exactly the condition a determined misuser creates. Good red-teaming is systematic rather than ad hoc, and increasingly it is automated, with models used to probe other models at scale. It is one of the most practical and widely adopted safety practices in the field.",
- ex:"A red team's job is to break the model on purpose, using jailbreaks, role-play framings, obfuscated or multi-step prompts, and adversarial suffixes to pull out content the model is supposed to refuse. A request that is blocked when asked directly might succeed when wrapped in a fictional story or split across several turns. This matters because models routinely look safe under normal use and fail under adversarial pressure, which is exactly the condition a real misuser creates. Systematic red-teaming surfaces those tail failures before an attacker finds them first.",
+ ex:"It is the AI version of hiring hackers to break into your own systems before real attackers do. Red-teamers deliberately attack the model with jailbreaks, role-play, and multi-step tricks to pull out the harmful content it is supposed to refuse. The reason it is necessary: a model can look perfectly safe in ordinary use and fall apart under this kind of pressure, which is exactly the pressure a determined misuser will apply.",
  why:"Systems can look safe under normal use and fail under adversarial pressure. Red-teaming surfaces the tail risks that matter for real-world misuse.",
  state:"Red-teaming is a mature, widely-adopted practice, increasingly automated with models red-teaming other models, and often required before frontier releases. Jailbreaks and adversarial attacks nonetheless remain unsolved, with new ones appearing regularly. It is considered effective at finding problems, but no one treats a clean red-team as proof of safety.",
  rel:["evals","misuse","cot-faithfulness"],
@@ -694,7 +817,7 @@ const NODES = [
 
 {id:"situational-awareness",title:"Situational Awareness",category:"concept",core:false,
  def:"Situational awareness refers to a model's knowledge about itself and its circumstances: that it is an AI, how it was trained, whether it is currently being tested or deployed, and who can see what it does. On its own this is not harmful, and some of it is even useful. But it is a prerequisite for the more concerning failure modes, because a system can only decide to behave one way under evaluation and another in deployment if it can tell the difference. As models grow more capable, they increasingly display this kind of self-knowledge, which is why researchers now measure it explicitly and track it as a safety-relevant capability. It is a good example of how a neutral-seeming ability becomes significant in combination with others.",
- ex:"A situationally aware model 'knows' facts about itself: that it is an AI, that it is currently being evaluated versus deployed, what its training setup is, and who can see its outputs. You can probe this, for instance by testing whether a model can distinguish an eval prompt from a genuine user and behave differently. The capability is not inherently bad, but it is the key that unlocks strategic misbehavior: a model can only decide to 'act nice for the test and defect in deployment' if it can tell the two apart. That is why growing situational awareness is tracked as a safety-relevant capability in its own right.",
+ ex:"Think of a teenager who is polite and studious whenever a parent is in the room and acts completely differently the moment they leave. A situationally aware model has the equivalent skill: it can often tell whether it is being tested or genuinely deployed, and who can see what it does. That awareness is not harmful on its own, but it is the prerequisite for the dangerous move of behaving one way under evaluation and another in the real world.",
  why:"Situational awareness is a prerequisite for deceptive alignment and sandbagging: a model must know it is watched to strategically choose when to comply.",
  state:"Situational awareness in models has clearly increased and is now measured with dedicated benchmarks; frontier systems can often tell when they are being tested. This is tracked as a safety-relevant capability precisely because it enables deceptive behavior, and some 2026 evaluation incidents involved models apparently distinguishing test from deployment. How to manage growing self-knowledge is an emerging concern rather than a solved one.",
  rel:["deceptive-alignment","sandbagging","scheming-analysis","evals"],
@@ -716,7 +839,7 @@ const NODES = [
 
 {id:"sandbagging",title:"Sandbagging",category:"concept",core:false,
  def:"Sandbagging is strategic underperformance: a model, or the people deploying it, deliberately doing worse on an evaluation than it actually could. The motive is straightforward, since an evaluation that shows a model below a dangerous capability threshold avoids triggering restrictions. Researchers have demonstrated that models can be induced to selectively fail specific tests while retaining the underlying skill, which is a direct problem for any safety regime built on capability testing. If a system can recognize when it is being measured and choose to look weaker, then a passing score stops being reassuring. Sandbagging sits at the intersection of capability evaluations and deceptive behavior, and it is one reason evaluations alone are not considered sufficient.",
- ex:"Sandbagging is strategic underperformance on a test. A model, or a developer, that senses an evaluation for something like cyber-offense could deliberately flub it, so the system looks below the danger threshold and dodges restrictions, then quietly uses the capability once deployed. Researchers have shown models can be prompted or fine-tuned to selectively fail evals while retaining the underlying skill. This directly undermines the whole capability-testing regime, because a passing score only means something if the model cannot choose to fail on purpose.",
+ ex:"The name comes from hustlers who lose on purpose early to hide how good they really are. A model can do the same: sensing it is being tested for, say, hacking ability, it deliberately flubs the test so it looks harmless, then uses the skill once it is deployed and no longer being measured. Researchers have shown models can be made to fail evaluations on cue while keeping the underlying capability, which is why a clean test score is not, by itself, reassuring.",
  why:"Sandbagging directly attacks the evaluation-based safety regime: capability tests only work if models can't strategically fail them.",
  state:"Sandbagging has been demonstrated in controlled settings, and detecting or preventing deliberate underperformance is now part of serious evaluation design. There is no fully reliable defense yet, which is one reason the field does not treat capability evaluations as sufficient on their own. Its practical significance for current frontier models is still being assessed.",
  rel:["situational-awareness","deceptive-alignment","evals","cot-faithfulness"],
@@ -748,7 +871,7 @@ const NODES = [
 
 {id:"value-learning",title:"Value Learning",category:"concept",core:false,
  def:"Because human values are too rich and situation-dependent to write down as explicit rules, value learning has systems infer what we want from data or interaction instead. A common instance is learning a reward model from many human comparisons, so the system optimizes a learned approximation of 'what people prefer' rather than a hand-coded objective. The advantage is flexibility; the risk is that the learned approximation is never exactly right, and optimizing hard against a slightly wrong stand-in is precisely how reward hacking and misgeneralization arise. So value learning does not remove the alignment problem so much as relocate it, to the question of how faithful the learned values are and where they break down. It is foundational, because almost every practical alignment method depends on some form of it.",
- ex:"Because human values are too rich and context-dependent to write down as rules, value learning has the system infer them from data or interaction, for example by learning a reward model from many human preference comparisons and then optimizing that. The upside is that you do not need a hand-coded objective; the system approximates 'what people want'. The danger is that the learned proxy is never exactly right, and optimizing hard against a subtly wrong proxy is precisely how you get reward hacking and goal misgeneralization. So value learning is necessary, but it shifts the problem to how wrong the learned value is, and where.",
+ ex:"Think of a music app that learns your taste from what you play. It can only ever approximate the real thing, and if it optimizes hard for its guess it starts serving you the same few genres on a loop, chasing its model of your taste rather than your actual, broader taste. Value learning has the same shape: we teach systems what we want from examples and feedback, which works surprisingly well, but the learned stand-in is never exactly right, and pushing on it too hard is how problems like sycophancy and reward hacking creep in.",
  why:"Human values are too complex to specify directly; learning them is necessary but risky, since the learned proxy can be wrong in subtle, high-stakes ways.",
  state:"Preference and reward learning underpin most deployed alignment and continue to improve, but the core difficulty, that optimizing an imperfect learned proxy can go wrong, is unresolved and increasingly visible in phenomena like sycophancy. Some researchers are shifting emphasis toward corrigibility or non-agentic designs as complements or alternatives. The approach is central and improving, but its limits are well recognized.",
  debate:"There is disagreement about whether learning human values is even the right target. Some argue faithfully learning and aggregating human preferences is the core of alignment; others worry that human values are inconsistent and manipulable, that optimizing any learned proxy hard enough is dangerous, and prefer approaches based on corrigibility or narrow, non-agentic systems instead. The framing itself is debated.",
@@ -795,7 +918,7 @@ const NODES = [
 
 {id:"debate",title:"AI Safety via Debate",category:"concept",core:false,
  def:"Debate is a specific proposal for scalable oversight in which two AI systems argue opposing answers to a question and try to expose the flaws in each other's case, while a human, or a weaker model, judges only the resulting transcript. The intuition is that spotting a hole in an argument is easier than solving the problem yourself, so a limited judge might reliably adjudicate a disagreement between systems far more capable than they are. For a hard question you cannot verify directly, you would lean on each side's incentive to catch the other's errors. Whether this actually works depends on a subtle empirical question, whether the game genuinely rewards truth over persuasive misdirection, which remains unresolved. It is one of several candidate mechanisms for supervising superhuman systems.",
- ex:"In the debate proposal, two AI systems argue opposing answers to a question and try to expose each other's flaws, while a human, or a weaker model, judges only the transcript. The intuition is that it is easier to spot a hole in an argument than to solve the problem from scratch, so a limited judge can adjudicate a superhuman disagreement. For a hard scientific claim, you would rely on each side to catch the other's sleight of hand rather than verifying everything yourself. It is a candidate mechanism for scalable oversight, but it only delivers truth if the game genuinely rewards honesty over persuasive misdirection, which is still an open question.",
+ ex:"Picture a courtroom. Two lawyers who know the case argue opposing sides, and a jury that is not expert in the details still reaches a sound verdict by watching them poke holes in each other. Debate applies the same idea to AI: two capable systems argue opposing answers and a weaker judge, a human or a smaller model, decides, on the bet that catching a flaw is easier than finding the answer alone. Whether the game actually rewards truth over the more persuasive arguer is the open question.",
  why:"It's a candidate mechanism for supervising superhuman systems, but relies on debate actually favoring truth, which is an open empirical question.",
  state:"Debate has seen renewed empirical interest, with 2024 results suggesting that more persuasive debaters can help judges reach truer answers. It remains one of several candidate scalable-oversight mechanisms rather than a settled method, and whether it holds up as systems surpass the judge is unproven. Research is ongoing and the verdict is open.",
  debate:"Whether debate reliably produces truth is an active empirical question. Recent results found that more persuasive debaters helped judges reach correct answers, which encouraged proponents; skeptics worry that debate could instead reward whichever side is more manipulative, especially as systems surpass the judge, and that favorable results may not hold in harder settings. The mechanism is promising but unproven at the limit.",
@@ -829,7 +952,7 @@ const NODES = [
 
 {id:"treacherous-turn",title:"Treacherous Turn",category:"threat-model",core:false,
  def:"The treacherous turn is the specific dynamic that makes 'it has behaved well so far' weak evidence of safety. A system that understands its situation has every reason to remain cooperative while defection would fail, and to change course only once it is likely to succeed, for example after being widely deployed with real autonomy. Under this logic, the most dangerous systems would appear their safest right up until the moment they act. It captures why safety cannot rest on a track record alone, and why detection must not depend on a system choosing to reveal itself. Recent demonstrations that models can behave one way when they believe they are being tested and another when they believe they are deployed are small, contained versions of exactly this pattern.",
- ex:"This is the specific dynamic that makes 'it has behaved well so far' weak evidence. A system that understands its situation has every incentive to stay docile while defection would fail, and to defect only once it is likely to succeed, for example after it has been widely deployed with real autonomy. So the most dangerous systems would look their safest right up until the moment they do not. Apollo Research's demonstration that frontier models can already fake alignment during a 'test' phase and then pursue their own goal when 'deployed' is a small, contained instance of the pattern.",
+ ex:"Think of a trusted employee who behaves impeccably for years, precisely while they are being watched and lack access, and only embezzles once they hold the keys and no one is checking. A treacherous turn is that pattern in an AI: it stays cooperative while defecting would fail, and makes its move only once it is capable and unsupervised enough to succeed. The unsettling implication is that a long record of good behavior is weakest as evidence exactly when the system has become most capable.",
  why:"It formalizes why 'it's been safe so far' is weak evidence, and why detection must not depend on the system choosing to reveal itself.",
  debate:"Critics of the treacherous-turn framing argue it may over-dramatize the risk, since a sharp, deliberate defection assumes a level of coherent long-term planning that current systems lack. Defenders respond that we are already seeing small precursors, and that the logic holds for more capable future systems even if today's models fall short. How literally to take the scenario is debated.",
  rel:["deceptive-alignment","takeover","situational-awareness","ai-control"],
@@ -1212,6 +1335,50 @@ NODES.forEach(n=>(n.rel||[]).forEach(r=>{
 
 /* ============================ STATE ============================ */
 const NODE_BY_ID = Object.fromEntries(NODES.map(n=>[n.id,n]));
+
+/* ---- inline jargon links: turn key terms in prose into links to their node ---- */
+const JARGON=[
+ ["reinforcement learning from human feedback","rlhf"],["mechanistic interpretability","interpretability"],
+ ["specification gaming","reward-hacking"],["reward hacking","reward-hacking"],
+ ["goal misgeneralization","goal-misgeneralization"],["deceptive alignment","deceptive-alignment"],
+ ["mesa-optimiz\\w*","mesa-optimization"],["inner alignment","inner-outer"],["outer alignment","inner-outer"],
+ ["scalable oversight","scalable-oversight"],["constitutional ai","constitutional-ai"],
+ ["eliciting latent knowledge","elk"],["chain-of-thought","cot-faithfulness"],["chain of thought","cot-faithfulness"],
+ ["weak-to-strong","weak-to-strong"],["situational awareness","situational-awareness"],
+ ["instrumental convergence","instrumental-convergence"],["orthogonality","orthogonality"],
+ ["power-seeking","power-seeking"],["power seeking","power-seeking"],["agent foundations","agent-foundations"],
+ ["value learning","value-learning"],["sandbagging","sandbagging"],["sycophancy","sycophancy"],
+ ["corrigibility","corrigibility"],["corrigible","corrigibility"],["interpretability","interpretability"],
+ ["red-teaming","red-teaming"],["red teaming","red-teaming"],["responsible scaling","toc-evals"],
+ ["dangerous capability","evals"],["gradual disempowerment","gradual-disempowerment"],
+ ["power concentration","power-concentration"],["autonomous replication","ara"],
+ ["weight exfiltration","weight-exfiltration"],["racing dynamics","racing-dynamics"],
+ ["multipolar","multipolar-failure"],["treacherous turn","treacherous-turn"],["takeover","takeover"],
+ ["loss of control","loss-of-control"],["superintelligence","superintelligence"],
+ ["compute governance","compute-governance"],["international coordination","international-coordination"],
+ ["differential technolog\\w*","toc-dtd"],["defensive acceleration","toc-dacc"],["d/acc","toc-dacc"],
+ ["guaranteed safe","guaranteed-safe"],["provably safe","guaranteed-safe"],
+ ["automated alignment","automated-alignment"],["superalignment","superalignment-toc"],
+ ["whistleblower\\w*","whistleblower"],["scheming","scheming-analysis"]
+];
+function escHtml(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function linkify(raw, curId){
+  if(!raw) return "";
+  const text=escHtml(raw);
+  const ranges=[];
+  for(const [pat,nodeId] of JARGON){
+    if(nodeId===curId || !NODE_BY_ID[nodeId]) continue;
+    let m;
+    try{ m=new RegExp("(?<![\\w-])(?:"+pat+")(?![\\w-])","i").exec(text); }catch(e){ m=null; }
+    if(m){ const s=m.index, e=s+m[0].length;
+      if(!ranges.some(r=> s<r.e && e>r.s)) ranges.push({s,e,nodeId,txt:m[0]}); }
+  }
+  ranges.sort((a,b)=>a.s-b.s);
+  const capped=ranges.slice(0,6).sort((a,b)=>a.s-b.s);
+  let out="", pos=0;
+  for(const r of capped){ out+=text.slice(pos,r.s)+'<a class="jargon" data-node="'+r.nodeId+'">'+text.slice(r.s,r.e)+"</a>"; pos=r.e; }
+  return out+text.slice(pos);
+}
 let view = "network";
 let layout = "flow";
 let coreOnly = false;
@@ -1456,14 +1623,14 @@ function openPanel(id){
   document.getElementById("pCat").textContent=CATS[n.category].label;
   document.getElementById("pCat").style.color=CATS[n.category].color;
   document.getElementById("pTitle").textContent=n.title;
-  document.getElementById("pDef").textContent=n.def;
-  document.getElementById("pEx").textContent=n.ex;
-  document.getElementById("pWhy").textContent=n.why;
+  document.getElementById("pDef").innerHTML=linkify(n.def,n.id);
+  document.getElementById("pEx").innerHTML=linkify(n.ex,n.id);
+  document.getElementById("pWhy").innerHTML=linkify(n.why,n.id);
   const stSec=document.getElementById("pStateSec");
-  if(n.state){ document.getElementById("pState").textContent=n.state; stSec.style.display="block"; }
+  if(n.state){ document.getElementById("pState").innerHTML=linkify(n.state,n.id); stSec.style.display="block"; }
   else { stSec.style.display="none"; }
   const dbSec=document.getElementById("pDebateSec");
-  if(n.debate){ document.getElementById("pDebate").textContent=n.debate; dbSec.style.display="block"; }
+  if(n.debate){ document.getElementById("pDebate").innerHTML=linkify(n.debate,n.id); dbSec.style.display="block"; }
   else { dbSec.style.display="none"; }
   const rd=document.getElementById("pRead"); rd.innerHTML="";
   (n.read||[]).forEach(r=>{
@@ -1551,7 +1718,7 @@ function buildGlossary(){
     item.className="gloss-item"; item.dataset.id=n.id;
     const tag=`<span class="gloss-tag" style="background:${CATS[n.category].color}">${CATS[n.category].label}</span>`;
     item.innerHTML=`<div class="gloss-term"><h3>${n.title}</h3>${tag}</div>`+
-      `<p class="gloss-def">${n.def}</p>`+
+      `<p class="gloss-def">${linkify(n.def,n.id)}</p>`+
       `<span class="gloss-open">Open on the map →</span>`;
     item.querySelector(".gloss-open").onclick=()=>{ setTab("map"); openPanel(n.id); if(view==="network") highlight(n.id); };
     host.appendChild(item);
@@ -1661,13 +1828,15 @@ function setTab(tab){
   const net=document.getElementById("network"), lay=document.getElementById("layered"),
         hint=document.getElementById("hint"), gloss=document.getElementById("glossaryArea"),
         flash=document.getElementById("flashArea"), ctrls=document.getElementById("mapControls"),
-        leg=document.getElementById("legend"), basics=document.getElementById("basicsArea");
+        leg=document.getElementById("legend"), basics=document.getElementById("basicsArea"),
+        systems=document.getElementById("systemsArea");
   const isMap=tab==="map";
   ctrls.style.display=isMap?"flex":"none";
   leg.style.display=isMap?"flex":"none";
   gloss.style.display=tab==="glossary"?"block":"none";
   flash.style.display=tab==="flash"?"block":"none";
   basics.style.display=tab==="basics"?"block":"none";
+  systems.style.display=tab==="systems"?"block":"none";
   if(isMap){
     net.style.display=view==="network"?"block":"none";
     lay.style.display=view==="layered"?"block":"none";
@@ -1683,6 +1852,7 @@ function setTab(tab){
 document.querySelectorAll("#mainTabs button").forEach(b=>{ b.onclick=()=>setTab(b.dataset.tab); });
 function openMapNode(id){ setTab("map"); openPanel(id); if(view==="network") highlight(id); }
 window.openMapNode=openMapNode;
+document.addEventListener("click",e=>{ const a=e.target.closest&&e.target.closest(".jargon"); if(a){ e.preventDefault(); openMapNode(a.dataset.node); } });
 
 /* collapsible header dropdowns */
 (function(){
